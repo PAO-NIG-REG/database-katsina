@@ -1,8 +1,8 @@
-   
+﻿   
 --- This is for correctly setting up the orthophoto onto localhost
 UPDATE system.config_map_layer 
-SET url = 'http://localhost:8085/geoserver/kebbi/wms',
-wms_layers= 'kebbi:kebbi',
+SET url = 'http://localhost:8085/geoserver/katsina/wms',
+wms_layers= 'katsina:katsina',
 wms_format= 'image/jpeg',
 visible_in_start = TRUE,
 active = TRUE
@@ -139,10 +139,10 @@ insert into system.map_search_option(code, title, query_name, active, min_search
 UPDATE public.geometry_columns SET srid = 32632; 
 UPDATE application.application set location = null;
 UPDATE system.setting SET vl = '32632' WHERE "name" = 'map-srid'; 
-UPDATE system.setting SET vl = '-120970.290' WHERE "name" = 'map-west'; 
-UPDATE system.setting SET vl = '1123922.356' WHERE "name" = 'map-south'; 
-UPDATE system.setting SET vl = '158038.360' WHERE "name" = 'map-east'; 
-UPDATE system.setting SET vl = '1489740.555' WHERE "name" = 'map-north';
+UPDATE system.setting SET vl = '258697.64' WHERE "name" = 'map-west'; 
+UPDATE system.setting SET vl = '1227083.49' WHERE "name" = 'map-south'; 
+UPDATE system.setting SET vl = '516039.33' WHERE "name" = 'map-east'; 
+UPDATE system.setting SET vl = '1478420.54' WHERE "name" = 'map-north';
 UPDATE system.crs SET srid = '32632';
 
 ---------------update cadastre.hierarchy_level --------------------------
@@ -209,3 +209,21 @@ ALTER TABLE cadastre.survey_point_historic ADD CONSTRAINT enforce_srid_original_
 
 --ALTER TABLE bulk_operation.spatial_unit_temporary DROP CONSTRAINT IF EXISTS enforce_srid_geom;
 --ALTER TABLE bulk_operation.spatial_unit_temporary ADD CONSTRAINT enforce_srid_geom CHECK (st_srid(geom) = 32632);
+
+-- Creates wrapper functions for those PostGIS 1.5 
+-- functions used by SOLA that have been deprecated 
+-- or removed from PostGIS 2.0
+CREATE OR REPLACE FUNCTION ST_MakeBox3D(geometry, geometry)
+RETURNS box3d
+AS 'SELECT ST_3DMakeBox($1, $2)'
+LANGUAGE 'sql' IMMUTABLE STRICT;
+
+CREATE OR REPLACE FUNCTION SetSrid(geometry, integer)
+RETURNS geometry
+AS 'SELECT ST_SetSrid($1, $2)'
+LANGUAGE 'sql' IMMUTABLE STRICT;
+
+
+
+
+
