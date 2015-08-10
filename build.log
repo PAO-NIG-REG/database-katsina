@@ -1,0 +1,59 @@
+Starting Build at  9:11:18.98 
+Creating database... 
+ pg_terminate_backend 
+----------------------
+ t
+(1 row)
+
+psql:database.sql:24: ERROR:  column pg_stat_activity.procpid does not exist
+LINE 1: SELECT pg_terminate_backend(pg_stat_activity.procpid)
+                                    ^
+DROP DATABASE
+CREATE DATABASE
+ALTER DATABASE
+GRANT
+GRANT
+You are now connected to database "sola" as user "postgres".
+CREATE EXTENSION
+CREATE EXTENSION
+### Running schema\drop_schemas.sql... 
+psql:schema/drop_schemas.sql:1: NOTICE:  schema "address" does not exist, skipping
+psql:schema/drop_schemas.sql:2: NOTICE:  schema "party" does not exist, skipping
+psql:schema/drop_schemas.sql:3: NOTICE:  schema "document" does not exist, skipping
+psql:schema/drop_schemas.sql:4: NOTICE:  schema "source" does not exist, skipping
+psql:schema/drop_schemas.sql:5: NOTICE:  schema "bulk_operation" does not exist, skipping
+psql:schema/drop_schemas.sql:6: NOTICE:  schema "transaction" does not exist, skipping
+psql:schema/drop_schemas.sql:7: NOTICE:  schema "cadastre" does not exist, skipping
+psql:schema/drop_schemas.sql:8: NOTICE:  schema "system" does not exist, skipping
+psql:schema/drop_schemas.sql:9: NOTICE:  schema "administrative" does not exist, skipping
+psql:schema/drop_schemas.sql:10: NOTICE:  schema "application" does not exist, skipping
+psql:schema/drop_schemas.sql:11: NOTICE:  schema "opentenure" does not exist, skipping
+### Running schema\public.sql... 
+### Running schema\sola_schemas.sql... 
+### Running config\business_rules.sql... 
+### Running config\reference_tables.sql... 
+### Running config\system.sql... 
+### Running config\unlocalized_reference_tables.sql... 
+### Running config\users.sql... 
+### Running extension\1_spatial_config.sql... 
+psql:extension/1_spatial_config.sql:9: ERROR:  syntax error at or near "﻿"
+LINE 1: ﻿   
+        ^
+### Running extension\2_sola_populate_shapefiles.sql... 
+### Running extension\4_capture_cofo_extension.sql... 
+psql:extension/4_capture_cofo_extension.sql:3: ERROR:  syntax error at or near "﻿"
+LINE 1: ﻿
+        ^
+psql:extension/4_capture_cofo_extension.sql:22: NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "ba_unit_detail_type_pkey" for table "ba_unit_detail_type"
+psql:extension/4_capture_cofo_extension.sql:22: NOTICE:  CREATE TABLE / UNIQUE will create implicit index "ba_unit_detail_type_display_value_unique" for table "ba_unit_detail_type"
+psql:extension/4_capture_cofo_extension.sql:62: NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "ba_unit_detail_pkey" for table "ba_unit_detail"
+psql:extension/4_capture_cofo_extension.sql:183: NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "rrr_detail_type_pkey" for table "rrr_detail_type"
+psql:extension/4_capture_cofo_extension.sql:183: NOTICE:  CREATE TABLE / UNIQUE will create implicit index "rrr_detail_type_display_value_unique" for table "rrr_detail_type"
+psql:extension/4_capture_cofo_extension.sql:223: NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "rrr_detail_pkey" for table "rrr_detail"
+psql:extension/4_capture_cofo_extension.sql:353: ERROR:  column "is_for" of relation "condition_type" does not exist
+LINE 1: ...n_type (code, display_value, description, status, is_for) VA...
+                                                             ^
+psql:extension/4_capture_cofo_extension.sql:354: ERROR:  column "is_for" of relation "condition_type" does not exist
+LINE 1: ...n_type (code, display_value, description, status, is_for) VA...
+                                                             ^
+Finished at  9:12:22.90 

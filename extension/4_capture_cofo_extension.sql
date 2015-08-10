@@ -7,7 +7,7 @@ ALTER TABLE administrative.condition_type
 
 -- DROP TABLE administrative.ba_unit_detail_type;
 
-CREATE TABLE administrative.ba_unit_detail_type
+CREATE TABLE IF NOT EXISTS   administrative.ba_unit_detail_type
 (
   code character varying(20) NOT NULL, -- The code for the detail type.
   display_value character varying(500) NOT NULL, -- Displayed value of the detail type.
@@ -36,7 +36,7 @@ COMMENT ON COLUMN administrative.ba_unit_detail_type.status IS 'Status of the de
 
 -- DROP TABLE administrative.ba_unit_detail;
 
-CREATE TABLE administrative.ba_unit_detail
+CREATE TABLE IF NOT EXISTS  administrative.ba_unit_detail
 (
   id character varying(40) NOT NULL, -- Identifier for the detail.
   ba_unit_id character varying(40) NOT NULL, -- Identifier of the ba_unit the detail relates to.
@@ -80,7 +80,7 @@ COMMENT ON COLUMN administrative.ba_unit_detail.change_time IS 'The date and tim
 
 -- Index: administrative.ba_unit_detail_detail_code_fk85_ind
 
--- DROP INDEX administrative.ba_unit_detail_detail_code_fk85_ind;
+DROP INDEX administrative.ba_unit_detail_detail_code_fk85_ind;
 
 CREATE INDEX ba_unit_detail_detail_code_fk85_ind
   ON administrative.ba_unit_detail
@@ -89,7 +89,7 @@ CREATE INDEX ba_unit_detail_detail_code_fk85_ind
 
 -- Index: administrative.ba_unit_detail_index_on_rowidentifier
 
--- DROP INDEX administrative.ba_unit_detail_index_on_rowidentifier;
+DROP INDEX administrative.ba_unit_detail_index_on_rowidentifier;
 
 CREATE INDEX ba_unit_detail_index_on_rowidentifier
   ON administrative.ba_unit_detail
@@ -98,7 +98,7 @@ CREATE INDEX ba_unit_detail_index_on_rowidentifier
 
 -- Index: administrative.ba_unit_detail_ba_unit_id_fk86_ind
 
--- DROP INDEX administrative.ba_unit_detail_ba_unit_id_fk86_ind;
+DROP INDEX administrative.ba_unit_detail_ba_unit_id_fk86_ind;
 
 CREATE INDEX ba_unit_detail_ba_unit_id_fk86_ind
   ON administrative.ba_unit_detail
@@ -108,7 +108,7 @@ CREATE INDEX ba_unit_detail_ba_unit_id_fk86_ind
 
 -- Trigger: __track_changes on administrative.ba_unit_detail
 
--- DROP TRIGGER __track_changes ON administrative.ba_unit_detail;
+DROP TRIGGER __track_changes ON administrative.ba_unit_detail;
 
 CREATE TRIGGER __track_changes
   BEFORE INSERT OR UPDATE
@@ -118,7 +118,7 @@ CREATE TRIGGER __track_changes
 
 -- Trigger: __track_history on administrative.ba_unit_detail
 
--- DROP TRIGGER __track_history ON administrative.ba_unit_detail;
+DROP TRIGGER __track_history ON administrative.ba_unit_detail;
 
 CREATE TRIGGER __track_history
   AFTER UPDATE OR DELETE
@@ -132,7 +132,7 @@ CREATE TRIGGER __track_history
 
 -- DROP TABLE administrative.ba_unit_detail_historic;
 
-CREATE TABLE administrative.ba_unit_detail_historic
+CREATE TABLE IF NOT EXISTS  administrative.ba_unit_detail_historic
 (
   id character varying(40),
   ba_unit_id character varying(40),
@@ -155,7 +155,7 @@ ALTER TABLE administrative.ba_unit_detail_historic
 
 -- Index: administrative.ba_unit_detail_historic_index_on_rowidentifier
 
--- DROP INDEX administrative.ba_unit_detail_historic_index_on_rowidentifier;
+DROP INDEX administrative.ba_unit_detail_historic_index_on_rowidentifier;
 
 CREATE INDEX ba_unit_detail_historic_index_on_rowidentifier
   ON administrative.ba_unit_detail_historic
@@ -168,7 +168,7 @@ CREATE INDEX ba_unit_detail_historic_index_on_rowidentifier
 
 -- DROP TABLE administrative.rrr_detail_type;
 
-CREATE TABLE administrative.rrr_detail_type
+CREATE TABLE IF NOT EXISTS  administrative.rrr_detail_type
 (
   code character varying(20) NOT NULL, -- The code for the detail type.
   display_value character varying(500) NOT NULL, -- Displayed value of the detail type.
@@ -197,7 +197,7 @@ COMMENT ON COLUMN administrative.rrr_detail_type.status IS 'Status of the detail
 
 -- DROP TABLE administrative.rrr_detail;
 
-CREATE TABLE administrative.rrr_detail
+CREATE TABLE IF NOT EXISTS  administrative.rrr_detail
 (
   id character varying(40) NOT NULL, -- Identifier for the detail.
   rrr_id character varying(40) NOT NULL, -- Identifier of the rrr the detail relates to.
@@ -241,7 +241,7 @@ COMMENT ON COLUMN administrative.rrr_detail.change_time IS 'The date and time th
 
 -- Index: administrative.rrr_detail_detail_code_fk85_ind
 
--- DROP INDEX administrative.rrr_detail_detail_code_fk85_ind;
+DROP INDEX administrative.rrr_detail_detail_code_fk85_ind;
 
 CREATE INDEX rrr_detail_detail_code_fk85_ind
   ON administrative.rrr_detail
@@ -250,7 +250,7 @@ CREATE INDEX rrr_detail_detail_code_fk85_ind
 
 -- Index: administrative.rrr_detail_index_on_rowidentifier
 
--- DROP INDEX administrative.rrr_detail_index_on_rowidentifier;
+DROP INDEX administrative.rrr_detail_index_on_rowidentifier;
 
 CREATE INDEX rrr_detail_index_on_rowidentifier
   ON administrative.rrr_detail
@@ -259,7 +259,7 @@ CREATE INDEX rrr_detail_index_on_rowidentifier
 
 -- Index: administrative.rrr_detail_rrr_id_fk86_ind
 
--- DROP INDEX administrative.rrr_detail_rrr_id_fk86_ind;
+DROP INDEX administrative.rrr_detail_rrr_id_fk86_ind;
 
 CREATE INDEX rrr_detail_rrr_id_fk86_ind
   ON administrative.rrr_detail
@@ -269,7 +269,7 @@ CREATE INDEX rrr_detail_rrr_id_fk86_ind
 
 -- Trigger: __track_changes on administrative.rrr_detail
 
--- DROP TRIGGER __track_changes ON administrative.rrr_detail;
+DROP TRIGGER __track_changes ON administrative.rrr_detail;
 
 CREATE TRIGGER __track_changes
   BEFORE INSERT OR UPDATE
@@ -279,7 +279,7 @@ CREATE TRIGGER __track_changes
 
 -- Trigger: __track_history on administrative.rrr_detail
 
--- DROP TRIGGER __track_history ON administrative.rrr_detail;
+DROP TRIGGER __track_history ON administrative.rrr_detail;
 
 CREATE TRIGGER __track_history
   AFTER UPDATE OR DELETE
@@ -293,7 +293,7 @@ CREATE TRIGGER __track_history
 
 -- DROP TABLE administrative.rrr_detail_historic;
 
-CREATE TABLE administrative.rrr_detail_historic
+CREATE TABLE IF NOT EXISTS  administrative.rrr_detail_historic
 (
   id character varying(40),
   rrr_id character varying(40),
@@ -316,7 +316,7 @@ ALTER TABLE administrative.rrr_detail_historic
 
 -- Index: administrative.rrr_detail_historic_index_on_rowidentifier
 
--- DROP INDEX administrative.rrr_detail_historic_index_on_rowidentifier;
+DROP INDEX administrative.rrr_detail_historic_index_on_rowidentifier;
 
 CREATE INDEX rrr_detail_historic_index_on_rowidentifier
   ON administrative.rrr_detail_historic
