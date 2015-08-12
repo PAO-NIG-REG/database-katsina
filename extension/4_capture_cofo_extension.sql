@@ -330,46 +330,6 @@ CREATE INDEX rrr_detail_historic_index_on_rowidentifier
 
 -- Dumped from database version 9.2.3
 -- Dumped by pg_dump version 9.3.1
--- Started on 2015-08-07 08:56:48
-
-SET statement_timeout = 0;
-SET client_encoding = 'UTF8';
-SET standard_conforming_strings = on;
-SET check_function_bodies = false;
-SET client_min_messages = warning;
-
-SET search_path = administrative, pg_catalog;
-
---
--- TOC entry 3731 (class 0 OID 679350)
--- Dependencies: 207
--- Data for Name: condition_type; Type: TABLE DATA; Schema: administrative; Owner: postgres
---
-
-SET SESSION AUTHORIZATION DEFAULT;
-
-ALTER TABLE condition_type DISABLE TRIGGER ALL;
-
-INSERT INTO condition_type (code, display_value, description, status, is_for) VALUES ('yearsTodevelope', 'Years to develope', 'Within the specified number of years the piece of land has to be developed by erecting buildings or other works', 'c', 'cofo');
-INSERT INTO condition_type (code, display_value, description, status, is_for) VALUES ('valueTodevelope', 'Value of the buildings/other works', 'the value of the buildings to be erected or the additional works to be completed in the specified period of time', 'c', 'cofo');
-
-
-ALTER TABLE condition_type ENABLE TRIGGER ALL;
-
--- Completed on 2015-08-07 08:56:49
-
---
--- PostgreSQL database dump complete
---
-
-
-
---
--- PostgreSQL database dump
---
-
--- Dumped from database version 9.2.3
--- Dumped by pg_dump version 9.3.1
 -- Started on 2015-08-06 16:41:13
 
 SET statement_timeout = 0;
@@ -435,7 +395,7 @@ SET search_path = administrative, pg_catalog;
 SET SESSION AUTHORIZATION DEFAULT;
 
 ALTER TABLE ba_unit_detail_type DISABLE TRIGGER ALL;
-
+DELETE FROM ba_unit_detail_type;
 INSERT INTO ba_unit_detail_type (code, display_value, description, status, is_for) VALUES ('plot', 'Plot Number', 'Plot number', 'c', 'cofo');
 INSERT INTO ba_unit_detail_type (code, display_value, description, status, is_for) VALUES ('block', 'Block', 'Block', 'c', 'cofo');
 INSERT INTO ba_unit_detail_type (code, display_value, description, status, is_for) VALUES ('plan', 'Layout Plan', 'Layout Plan', 'c', 'cofo');
@@ -443,6 +403,17 @@ INSERT INTO ba_unit_detail_type (code, display_value, description, status, is_fo
 INSERT INTO ba_unit_detail_type (code, display_value, description, status, is_for) VALUES ('location', 'Location', 'Location of the property', 'c', 'cofo');
 INSERT INTO ba_unit_detail_type (code, display_value, description, status, is_for) VALUES ('lga', 'LGA', 'Lga', 'c', 'cofo');
 INSERT INTO ba_unit_detail_type (code, display_value, description, status, is_for) VALUES ('estate', 'Estate', 'Estate type', 'c', 'cofo');
+INSERT INTO ba_unit_detail_type (code, display_value, description, status, is_for) VALUES ('yearsTodevelope', 'Years to develope', 'Within the specified number of years the piece of land has to be developed by erecting buildings or other works', 'c', 'cofo');
+INSERT INTO ba_unit_detail_type (code, display_value, description, status, is_for) VALUES ('valueTodevelope', 'Value of the buildings/other works', 'the value of the buildings to be erected or the additional works to be completed in the specified period of time', 'c', 'cofo');
+INSERT INTO ba_unit_detail_type (code, display_value, description, status, is_for) VALUES ('term', 'Term of Occupancy', 'The term the occupancy will last', 'c', 'cofo');
+INSERT INTO ba_unit_detail_type (code, display_value, description, status, is_for) VALUES ('revperiod', 'Review Period', 'The divided period of term of occupancy', 'c', 'cofo');
+INSERT INTO ba_unit_detail_type (code, display_value, description, status, is_for) VALUES ('startdate', 'Date Commenced', 'Date in which the occupancy started', 'c', 'cofo');
+INSERT INTO ba_unit_detail_type (code, display_value, description, status, is_for) VALUES ('purpose', 'Occupancy Right Purpose', 'Purpose of Occupancy', 'c', 'cofo');
+INSERT INTO ba_unit_detail_type (code, display_value, description, status, is_for) VALUES ('dateissued', 'Date Signed', 'Date when governor signed', 'c', 'cofo');
+INSERT INTO ba_unit_detail_type (code, display_value, description, status, is_for) VALUES ('rent', 'Yearly Rent', 'Amount of yearly rent', 'c', 'cofo');
+INSERT INTO ba_unit_detail_type (code, display_value, description, status, is_for) VALUES ('advpayment', 'Advance Payment', 'Payment in advance', 'c', 'cofo');
+INSERT INTO ba_unit_detail_type (code, display_value, description, status, is_for) VALUES ('instrnum', 'Instrument Number', 'The number of the CofO  Register', 'c', 'cofo');
+
 
 
 ALTER TABLE ba_unit_detail_type ENABLE TRIGGER ALL;
