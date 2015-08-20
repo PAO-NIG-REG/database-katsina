@@ -62,14 +62,14 @@ ALTER TABLE ba_unit_detail_type ENABLE TRIGGER ALL;
 
 --- METADATA AND SETTINGS  
 
-insert into system.config_map_layer_metadata (name_layer ,"name" , "value") values ('orthophoto', 'date', '?? DATE ??');
-insert into system.config_map_layer_metadata (name_layer ,"name" , "value") values ('orthophoto', 'sheet-number', '?? NW, SE, SW');
-insert into system.config_map_layer_metadata (name_layer ,"name" , "value") values ('orthophoto', 'resolution', '?? 50 cm ??');
-insert into system.config_map_layer_metadata (name_layer ,"name" , "value") values ('orthophoto', 'data-source', '?? DATUM ??');
+insert into system.config_map_layer_metadata (name_layer ,"name" , "value") values ('orthophoto', 'date', 'TBU DATE ??');
+insert into system.config_map_layer_metadata (name_layer ,"name" , "value") values ('orthophoto', 'sheet-number', 'TBU ?? NW, SE, SW');
+insert into system.config_map_layer_metadata (name_layer ,"name" , "value") values ('orthophoto', 'resolution', 'TBU 50 cm ??');
+insert into system.config_map_layer_metadata (name_layer ,"name" , "value") values ('orthophoto', 'data-source', 'TBU DATUM ??');
 
-insert into system.setting(name, vl, active, description) values('surveyor', '??', true, 'Name of Surveyor');
-insert into system.setting(name, vl, active, description) values('surveyorRank', '??', true, 'The rank of the Surveyor');
---insert into system.setting(name, vl, active, description) values('state', 'Katsina', true, 'the state');
+insert into system.setting(name, vl, active, description) values('surveyor', 'TBU SURVEYOR NAME', true, 'Name of Surveyor');
+insert into system.setting(name, vl, active, description) values('surveyorRank', 'TBU SURVEYOR RANK', true, 'The rank of the Surveyor');
+insert into system.setting(name, vl, active, description) values('state', 'Katsina', true, 'the state');
 --insert into system.setting(name, vl, active, description) values('featureFloatFront', 'images/sola/front_float.svg', true, 'svg for the floating element in front page');
 --insert into system.setting(name, vl, active, description) values('featureFloatBack', 'images/sola/back_float.svg', true, 'svg for the floating element in back page');
 --insert into system.setting(name, vl, active, description) values('featureFront', 'images/sola/front.svg', true, 'svg for the background element in front page');
@@ -77,6 +77,8 @@ insert into system.setting(name, vl, active, description) values('surveyorRank',
 
 
 
+--- source type
+INSERT INTO source.administrative_source_type (code, display_value, status, description, is_for_registration) VALUES ('parcelPlan', 'Title Deeds Plan', 'x', '...::::::::...::::...::::...::::...::::...', false);
 
 
 
@@ -254,7 +256,7 @@ CREATE OR REPLACE VIEW application.systematic_registration_certificates AS
 --	system.setting.system_id
     ( SELECT setting.vl
              from system.setting
-             WHERE setting.name::text = 'system-id'::text) 					AS state, 
+             WHERE setting.name::text = 'state'::text) 					AS state, 
           
 -- 	system.setting.surveyor
     ( SELECT setting.vl
