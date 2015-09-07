@@ -1,4 +1,0 @@
-reg_status_type
-transaction_status_type
-transaction
-transaction_source

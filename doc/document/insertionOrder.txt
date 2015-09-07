@@ -1,3 +1,0 @@
-document
-document_chunk
-Sequence: document_nr_seq
