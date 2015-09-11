@@ -1,4 +1,4 @@
-﻿   
+
 --- This is for correctly setting up the orthophoto onto localhost
 UPDATE system.config_map_layer 
 SET url = 'http://localhost:8085/geoserver/katsina/wms',
