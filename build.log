@@ -1,0 +1,61 @@
+Starting Build at 17:27:04.48 
+Creating database... 
+ pg_terminate_backend 
+----------------------
+(0 rows)
+
+psql:database.sql:24: ERROR:  column pg_stat_activity.procpid does not exist
+LINE 1: SELECT pg_terminate_backend(pg_stat_activity.procpid)
+                                    ^
+psql:database.sql:27: NOTICE:  database "sola" does not exist, skipping
+DROP DATABASE
+CREATE DATABASE
+ALTER DATABASE
+GRANT
+GRANT
+You are now connected to database "sola" as user "postgres".
+CREATE EXTENSION
+CREATE EXTENSION
+### Running schema\drop_schemas.sql... 
+psql:schema/drop_schemas.sql:1: NOTICE:  schema "address" does not exist, skipping
+psql:schema/drop_schemas.sql:2: NOTICE:  schema "party" does not exist, skipping
+psql:schema/drop_schemas.sql:3: NOTICE:  schema "document" does not exist, skipping
+psql:schema/drop_schemas.sql:4: NOTICE:  schema "source" does not exist, skipping
+psql:schema/drop_schemas.sql:5: NOTICE:  schema "bulk_operation" does not exist, skipping
+psql:schema/drop_schemas.sql:6: NOTICE:  schema "transaction" does not exist, skipping
+psql:schema/drop_schemas.sql:7: NOTICE:  schema "cadastre" does not exist, skipping
+psql:schema/drop_schemas.sql:8: NOTICE:  schema "system" does not exist, skipping
+psql:schema/drop_schemas.sql:9: NOTICE:  schema "administrative" does not exist, skipping
+psql:schema/drop_schemas.sql:10: NOTICE:  schema "application" does not exist, skipping
+psql:schema/drop_schemas.sql:11: NOTICE:  schema "opentenure" does not exist, skipping
+### Running schema\public.sql... 
+### Running schema\sola_schemas.sql... 
+### Running config\business_rules.sql... 
+### Running config\reference_tables.sql... 
+### Running config\system.sql... 
+### Running config\unlocalized_reference_tables.sql... 
+### Running config\users.sql... 
+### Running extension\1_spatial_config.sql... 
+### Running extension\2_sola_populate_shapefiles.sql... 
+### Running extension\3_reference_data.sql... 
+### Running extension\4_capture_cofo_extension.sql... 
+psql:extension/4_capture_cofo_extension.sql:29: NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "ba_unit_detail_type_pkey" for table "ba_unit_detail_type"
+psql:extension/4_capture_cofo_extension.sql:29: NOTICE:  CREATE TABLE / UNIQUE will create implicit index "ba_unit_detail_type_display_value_unique" for table "ba_unit_detail_type"
+psql:extension/4_capture_cofo_extension.sql:69: NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "ba_unit_detail_pkey" for table "ba_unit_detail"
+psql:extension/4_capture_cofo_extension.sql:90: ERROR:  index "ba_unit_detail_detail_code_fk85_ind" does not exist
+psql:extension/4_capture_cofo_extension.sql:99: ERROR:  index "ba_unit_detail_index_on_rowidentifier" does not exist
+psql:extension/4_capture_cofo_extension.sql:108: ERROR:  index "ba_unit_detail_ba_unit_id_fk86_ind" does not exist
+psql:extension/4_capture_cofo_extension.sql:118: ERROR:  trigger "__track_changes" for table "ba_unit_detail" does not exist
+psql:extension/4_capture_cofo_extension.sql:128: ERROR:  trigger "__track_history" for table "ba_unit_detail" does not exist
+psql:extension/4_capture_cofo_extension.sql:165: ERROR:  index "ba_unit_detail_historic_index_on_rowidentifier" does not exist
+### Running extension\5_new_cofo_view.sql... 
+### Running extension\6_update_BR_fornewFreeholdTitle.sql... 
+### Running extension\7_generate_cofo_nr.sql... 
+### Extracting data files... 
+
+7-Zip 9.20  Copyright (c) 1999-2010 Igor Pavlov  2010-11-18
+
+
+Error:
+cannot find archive
+Finished at 17:27:46.27 
