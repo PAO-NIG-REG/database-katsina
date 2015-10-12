@@ -1,4 +1,4 @@
-Starting Build at 12:29:52,55 
+Starting Build at 11:37:32,23 
 ### Running schema\drop_schemas.sql... 
 psql:schema/drop_schemas.sql:1: NOTICE:  drop cascades to 4 other objects
 DETAIL:  drop cascades to table address.address
@@ -36,10 +36,11 @@ DETAIL:  drop cascades to table document.document
 drop cascades to table document.document_chunk
 drop cascades to table document.document_historic
 drop cascades to sequence document.document_nr_seq
-psql:schema/drop_schemas.sql:4: NOTICE:  drop cascades to 22 other objects
+psql:schema/drop_schemas.sql:4: NOTICE:  drop cascades to 23 other objects
 DETAIL:  drop cascades to function source.f_for_tbl_source_trg_change_of_status()
 drop cascades to table source.administrative_source_type
 drop cascades to constraint request_type_requires_source_type_source_type_code_fk128 on table application.request_type_requires_source_type
+drop cascades to constraint fk_document_type_code on table opentenure.attachment
 drop cascades to table source.archive
 drop cascades to table source.archive_historic
 drop cascades to table source.availability_status_type
@@ -87,9 +88,8 @@ drop cascades to table transaction.transaction_historic
 drop cascades to table transaction.transaction_source
 drop cascades to table transaction.transaction_source_historic
 drop cascades to table transaction.transaction_status_type
-psql:schema/drop_schemas.sql:7: NOTICE:  drop cascades to 58 other objects
+psql:schema/drop_schemas.sql:7: NOTICE:  drop cascades to 59 other objects
 DETAIL:  drop cascades to function cadastre.add_topo_points(geometry,geometry)
-drop cascades to function cadastre.cadastre_object_name_is_valid(character varying,character varying)
 drop cascades to function cadastre.f_for_tbl_cadastre_object_trg_geommodify()
 drop cascades to function cadastre.f_for_tbl_cadastre_object_trg_new()
 drop cascades to function cadastre.f_for_tbl_cadastre_object_trg_remove()
@@ -103,6 +103,7 @@ drop cascades to constraint ba_unit_contains_spatial_unit_spatial_unit_id_fk70 o
 drop cascades to constraint application_spatial_unit_spatial_unit_id_fk131 on table application.application_spatial_unit
 drop cascades to table cadastre.land_use_type
 drop cascades to constraint application_property_land_use_code_fk125 on table application.application_property
+drop cascades to constraint fk_claim_land_use_type on table opentenure.claim
 drop cascades to table cadastre.spatial_value_area
 drop cascades to view application.systematic_registration_certificates
 drop cascades to table cadastre.area_type
@@ -146,6 +147,7 @@ drop cascades to table cadastre.utility_network_type
 drop cascades to view cadastre.lga
 drop cascades to view cadastre.ward
 drop cascades to view cadastre.parcel_plan
+drop cascades to function cadastre.cadastre_object_name_is_valid(character varying,character varying)
 psql:schema/drop_schemas.sql:8: NOTICE:  drop cascades to 52 other objects
 DETAIL:  drop cascades to function system.check_brs(character varying,character varying[])
 drop cascades to function system.consolidation_consolidate(character varying,character varying)
@@ -199,7 +201,7 @@ drop cascades to sequence system.process_extract
 drop cascades to table system.query
 drop cascades to table system.query_field
 drop cascades to table system.version
-psql:schema/drop_schemas.sql:9: NOTICE:  drop cascades to 58 other objects
+psql:schema/drop_schemas.sql:9: NOTICE:  drop cascades to 59 other objects
 DETAIL:  drop cascades to function administrative.ba_unit_name_is_valid(character varying,character varying)
 drop cascades to function administrative.f_for_tbl_rrr_trg_change_from_pending()
 drop cascades to function administrative.get_ba_unit_pending_action(character varying)
@@ -248,6 +250,7 @@ drop cascades to table administrative.rrr_share
 drop cascades to table administrative.rrr_share_historic
 drop cascades to table administrative.rrr_type
 drop cascades to constraint request_type_rrr_type_code_fk21 on table application.request_type
+drop cascades to constraint claim_fk_type_code on table opentenure.claim
 drop cascades to table administrative.source_describes_ba_unit
 drop cascades to table administrative.source_describes_ba_unit_historic
 drop cascades to table administrative.source_describes_rrr
@@ -290,7 +293,49 @@ drop cascades to table application.notify_property_historic
 drop cascades to table application.notify_uses_source
 drop cascades to table application.notify_historic
 drop cascades to table application.notify_uses_source_historic
-psql:schema/drop_schemas.sql:11: NOTICE:  schema "opentenure" does not exist, skipping
+psql:schema/drop_schemas.sql:11: NOTICE:  drop cascades to 42 other objects
+DETAIL:  drop cascades to function opentenure.f_for_trg_set_default()
+drop cascades to table opentenure.attachment
+drop cascades to table opentenure.attachment_chunk
+drop cascades to table opentenure.attachment_historic
+drop cascades to table opentenure.claim
+drop cascades to table opentenure.claim_comment
+drop cascades to table opentenure.claim_comment_historic
+drop cascades to table opentenure.claim_historic
+drop cascades to table opentenure.claim_location
+drop cascades to table opentenure.claim_location_historic
+drop cascades to sequence opentenure.claim_nr_seq
+drop cascades to table opentenure.claim_share
+drop cascades to table opentenure.claim_share_historic
+drop cascades to table opentenure.claim_status
+drop cascades to table opentenure.claim_uses_attachment
+drop cascades to table opentenure.claim_uses_attachment_historic
+drop cascades to table opentenure.field_constraint
+drop cascades to table opentenure.field_constraint_historic
+drop cascades to table opentenure.field_constraint_option
+drop cascades to table opentenure.field_constraint_option_historic
+drop cascades to table opentenure.field_constraint_type
+drop cascades to table opentenure.field_payload
+drop cascades to table opentenure.field_payload_historic
+drop cascades to table opentenure.field_template
+drop cascades to table opentenure.field_template_historic
+drop cascades to table opentenure.field_type
+drop cascades to table opentenure.field_value_type
+drop cascades to table opentenure.form_payload
+drop cascades to table opentenure.form_payload_historic
+drop cascades to table opentenure.form_template
+drop cascades to table opentenure.form_template_historic
+drop cascades to table opentenure.party
+drop cascades to table opentenure.party_for_claim_share
+drop cascades to table opentenure.party_for_claim_share_historic
+drop cascades to table opentenure.party_historic
+drop cascades to table opentenure.rejection_reason
+drop cascades to table opentenure.section_element_payload
+drop cascades to table opentenure.section_element_payload_historic
+drop cascades to table opentenure.section_payload
+drop cascades to table opentenure.section_payload_historic
+drop cascades to table opentenure.section_template
+drop cascades to table opentenure.section_template_historic
 ### Running schema\public.sql... 
 ### Running schema\sola_schemas.sql... 
 ### Running config\business_rules.sql... 
@@ -299,20 +344,45 @@ psql:schema/drop_schemas.sql:11: NOTICE:  schema "opentenure" does not exist, sk
 ### Running config\unlocalized_reference_tables.sql... 
 ### Running config\users.sql... 
 ### Running extension\1_spatial_config.sql... 
+psql:extension/1_spatial_config.sql:210: ERROR:  schema "bulk_operation" does not exist
+psql:extension/1_spatial_config.sql:211: ERROR:  schema "bulk_operation" does not exist
 ### Running extension\2_sola_populate_shapefiles.sql... 
 ### Running extension\3_reference_data.sql... 
+psql:extension/3_reference_data.sql:2: ERROR:  duplicate key value violates unique constraint "request_type_display_value_unique"
+DETAIL:  Key (display_value)=(SubDivision of Property (General)::::???????? ????? (?????)::::????? ?? (???)::::Varier Droit (Général)::::::::Variar Direitos (Geral)::::???? (??)) already exists.
+psql:extension/3_reference_data.sql:5: ERROR:  duplicate key value violates unique constraint "request_type_requires_source_type_pkey"
+DETAIL:  Key (source_type_code, request_type_code)=(deed, subdivideProperty) already exists.
 ### Running extension\4_capture_cofo_extension.sql... 
-psql:extension/4_capture_cofo_extension.sql:29: NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "ba_unit_detail_type_pkey" for table "ba_unit_detail_type"
-psql:extension/4_capture_cofo_extension.sql:29: NOTICE:  CREATE TABLE / UNIQUE will create implicit index "ba_unit_detail_type_display_value_unique" for table "ba_unit_detail_type"
-psql:extension/4_capture_cofo_extension.sql:69: NOTICE:  CREATE TABLE / PRIMARY KEY will create implicit index "ba_unit_detail_pkey" for table "ba_unit_detail"
-psql:extension/4_capture_cofo_extension.sql:90: ERROR:  index "ba_unit_detail_detail_code_fk85_ind" does not exist
-psql:extension/4_capture_cofo_extension.sql:99: ERROR:  index "ba_unit_detail_index_on_rowidentifier" does not exist
-psql:extension/4_capture_cofo_extension.sql:108: ERROR:  index "ba_unit_detail_ba_unit_id_fk86_ind" does not exist
-psql:extension/4_capture_cofo_extension.sql:118: ERROR:  trigger "__track_changes" for table "ba_unit_detail" does not exist
-psql:extension/4_capture_cofo_extension.sql:128: ERROR:  trigger "__track_history" for table "ba_unit_detail" does not exist
-psql:extension/4_capture_cofo_extension.sql:165: ERROR:  index "ba_unit_detail_historic_index_on_rowidentifier" does not exist
+psql:extension/4_capture_cofo_extension.sql:3: ERROR:  column "is_for" of relation "condition_type" already exists
+psql:extension/4_capture_cofo_extension.sql:5: ERROR:  column "field_type" of relation "condition_type" already exists
+psql:extension/4_capture_cofo_extension.sql:7: ERROR:  column "order_view" of relation "condition_type" already exists
+psql:extension/4_capture_cofo_extension.sql:29: NOTICE:  relation "ba_unit_detail_type" already exists, skipping
+psql:extension/4_capture_cofo_extension.sql:69: NOTICE:  relation "ba_unit_detail" already exists, skipping
+psql:extension/4_capture_cofo_extension.sql:159: NOTICE:  relation "ba_unit_detail_historic" already exists, skipping
 ### Running extension\5_new_cofo_view.sql... 
+psql:extension/5_new_cofo_view.sql:80: ERROR:  duplicate key value violates unique constraint "pk_config_map_layer_metadata"
+DETAIL:  Key (name_layer, name)=(orthophoto, date) already exists.
+psql:extension/5_new_cofo_view.sql:81: ERROR:  duplicate key value violates unique constraint "pk_config_map_layer_metadata"
+DETAIL:  Key (name_layer, name)=(orthophoto, sheet-number) already exists.
+psql:extension/5_new_cofo_view.sql:82: ERROR:  duplicate key value violates unique constraint "pk_config_map_layer_metadata"
+DETAIL:  Key (name_layer, name)=(orthophoto, resolution) already exists.
+psql:extension/5_new_cofo_view.sql:83: ERROR:  duplicate key value violates unique constraint "pk_config_map_layer_metadata"
+DETAIL:  Key (name_layer, name)=(orthophoto, data-source) already exists.
+psql:extension/5_new_cofo_view.sql:85: ERROR:  duplicate key value violates unique constraint "setting_pkey"
+DETAIL:  Key (name)=(surveyor) already exists.
+psql:extension/5_new_cofo_view.sql:86: ERROR:  duplicate key value violates unique constraint "setting_pkey"
+DETAIL:  Key (name)=(surveyorRank) already exists.
+psql:extension/5_new_cofo_view.sql:87: ERROR:  duplicate key value violates unique constraint "setting_pkey"
+DETAIL:  Key (name)=(state) already exists.
+psql:extension/5_new_cofo_view.sql:96: ERROR:  duplicate key value violates unique constraint "administrative_source_type_display_value_unique"
+DETAIL:  Key (display_value)=(Title Deeds Plan) already exists.
 ### Running extension\6_update_BR_fornewFreeholdTitle.sql... 
 ### Running extension\7_generate_cofo_nr.sql... 
+psql:extension/7_generate_cofo_nr.sql:11: ERROR:  relation "cofo_nr_seq" already exists
+psql:extension/7_generate_cofo_nr.sql:18: ERROR:  duplicate key value violates unique constraint "br_display_name_unique"
+DETAIL:  Key (display_name)=(generate-cofo-nr) already exists.
+psql:extension/7_generate_cofo_nr.sql:19: ERROR:  duplicate key value violates unique constraint "br_definition_pkey"
+DETAIL:  Key (br_id, active_from)=(generate-cofo-nr, 2014-02-20) already exists.
 ### Running extension\8_cadastre_object_name_is_valid.sql... 
-Finished at 12:30:23,07 
+psql:extension/8_cadastre_object_name_is_valid.sql:2: ERROR:  schema "bulk_operation" does not exist
+Finished at 11:37:49,43 
