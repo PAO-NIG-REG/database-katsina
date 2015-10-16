@@ -374,6 +374,15 @@ FROM application.service
 WHERE application_id = #{id} 
 AND action_code != ''cancel''
 AND request_type_code IN (''serviceEnquiry'', ''documentCopy'', ''cadastrePrint'', ''surveyPlanCopy'', ''titleSearch'')');
+INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('baunit-has-multiple-mortgages', '2014-02-20', 'infinity', 'SELECT	(SELECT (COUNT(*) = 0) FROM application.service sv2
+		 INNER JOIN transaction.transaction tn ON (sv2.id = tn.from_service_id)
+		 INNER JOIN administrative.rrr rr ON (tn.id = rr.transaction_id)
+		 INNER JOIN administrative.rrr rr2 ON ((rr.ba_unit_id = rr2.ba_unit_id) AND (rr2.type_code = ''mortgage'') AND (rr2.status_code =''current'') ) 
+	WHERE sv.id = #{id}) AS vl FROM application.service sv
+WHERE sv.id = #{id}
+AND sv.request_type_code = ''mortgage''
+ORDER BY 1
+LIMIT 1');
 INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('cancel-title-check-rrr-cancelled', '2014-02-20', 'infinity', 'WITH 	pending_property_rrr AS (SELECT DISTINCT ON(rr1.nr) rr1.nr FROM administrative.rrr rr1 
 				INNER JOIN transaction.transaction tn ON (rr1.transaction_id = tn.id)
 				INNER JOIN application.service sv1 ON (tn.from_service_id = sv1.id) 
@@ -510,15 +519,7 @@ INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('appl
            )
 
         ) as vl');
-INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('baunit-has-multiple-mortgages', '2014-02-20', 'infinity', 'SELECT	(SELECT (COUNT(*) = 0) FROM application.service sv2
-		 INNER JOIN transaction.transaction tn ON (sv2.id = tn.from_service_id)
-		 INNER JOIN administrative.rrr rr ON (tn.id = rr.transaction_id)
-		 INNER JOIN administrative.rrr rr2 ON ((rr.ba_unit_id = rr2.ba_unit_id) AND (rr2.type_code = ''mortgage'') AND (rr2.status_code =''current'') ) 
-	WHERE sv.id = #{id}) AS vl FROM application.service sv
-WHERE sv.id = #{id}
-AND sv.request_type_code = ''mortgage''
-ORDER BY 1
-LIMIT 1');
+INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('generate-process-progress-extract-max', '2014-09-12', 'infinity', 'select 7 + (count(*)*(3+5)) + 2 + 10 as vl from system.consolidation_config');
 INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('document-supporting-rrr-is-current', '2014-02-20', 'infinity', 'WITH serviceDocs AS	(SELECT DISTINCT ON (sc.id) sv.id AS sv_id, sc.id AS sc_id, sc.status_code, sc.type_code FROM application.service sv
 				INNER JOIN transaction.transaction tn ON (sv.id = tn.from_service_id)
 				INNER JOIN administrative.rrr rr ON (tn.id = rr.transaction_id)
@@ -808,6 +809,7 @@ SELECT	CASE 	WHEN (SELECT (cnt = 0) FROM checkServiceType) THEN NULL
 		WHEN (SELECT (cnt = 0) FROM checkSource) THEN TRUE
 		ELSE FALSE
 	END AS vl');
+INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('consolidation-extraction-file-name', '2014-09-12', 'infinity', 'select ''consolidation-'' || system.get_setting(''system-id'') || to_char(clock_timestamp(), ''-yyyy-MM-dd-HH24-MI'') as vl');
 INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('source-attach-in-transaction-allowed-type', '2014-02-20', 'infinity', 'WITH checkServiceType	AS	(SELECT COUNT(*) AS cnt FROM application.service sv1
 					INNER JOIN transaction.transaction tn ON (sv1.id = tn.from_service_id)
 					INNER JOIN source.source sc1 ON (tn.id = sc1.transaction_id)
@@ -955,8 +957,6 @@ INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('gene
   + 2 + (select count(*)*2 from system.consolidation_config) 
   + 1 + (select count(*)*2 from system.br_validation where target_code=''consolidate'')
   + 4 + (select count(*)*2 from system.consolidation_config) as vl');
-INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('generate-process-progress-extract-max', '2014-09-12', 'infinity', 'select 7 + (count(*)*(3+5)) + 2 + 10 as vl from system.consolidation_config');
-INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('consolidation-extraction-file-name', '2014-09-12', 'infinity', 'select ''consolidation-'' || system.get_setting(''system-id'') || to_char(clock_timestamp(), ''-yyyy-MM-dd-HH24-MI'') as vl');
 INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('consolidation-db-structure-the-same', '2014-02-20', 'infinity', 'with def_of_tables as (
   select source_table_name, target_table_name, 
     (select string_agg(col_definition, ''##'') from (select column_name || '' '' 

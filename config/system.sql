@@ -96,11 +96,11 @@ INSERT INTO config_map_layer (name, title, type_code, active, visible_in_start, 
 INSERT INTO config_map_layer (name, title, type_code, active, visible_in_start, item_order, style, url, wms_layers, wms_version, wms_format, wms_data_source, pojo_structure, pojo_query_name, pojo_query_name_for_select, shape_location, security_user, security_password, added_from_bulk_operation, use_in_public_display, use_for_ot) VALUES ('survey-controls', 'Survey controls::::Piani di controllo', 'pojo', true, false, 50, 'survey_control.xml', NULL, NULL, NULL, NULL, NULL, 'theGeom:Point,label:""', 'SpatialResult.getSurveyControls', 'dynamic.informationtool.get_survey_control', NULL, NULL, NULL, false, false, false);
 INSERT INTO config_map_layer (name, title, type_code, active, visible_in_start, item_order, style, url, wms_layers, wms_version, wms_format, wms_data_source, pojo_structure, pojo_query_name, pojo_query_name_for_select, shape_location, security_user, security_password, added_from_bulk_operation, use_in_public_display, use_for_ot) VALUES ('applications', 'Applications::::Pratiche', 'pojo', true, false, 70, 'application.xml', NULL, NULL, NULL, NULL, NULL, 'theGeom:MultiPoint,label:""', 'SpatialResult.getApplications', 'dynamic.informationtool.get_application', NULL, NULL, NULL, false, false, false);
 INSERT INTO config_map_layer (name, title, type_code, active, visible_in_start, item_order, style, url, wms_layers, wms_version, wms_format, wms_data_source, pojo_structure, pojo_query_name, pojo_query_name_for_select, shape_location, security_user, security_password, added_from_bulk_operation, use_in_public_display, use_for_ot) VALUES ('parcel-nodes', 'Parcel nodes', 'pojo', true, false, 15, 'parcel_node.xml', NULL, NULL, NULL, NULL, NULL, 'theGeom:Polygon,label:""', 'SpatialResult.getParcelNodes', NULL, NULL, NULL, NULL, false, false, false);
+INSERT INTO config_map_layer (name, title, type_code, active, visible_in_start, item_order, style, url, wms_layers, wms_version, wms_format, wms_data_source, pojo_structure, pojo_query_name, pojo_query_name_for_select, shape_location, security_user, security_password, added_from_bulk_operation, use_in_public_display, use_for_ot) VALUES ('claims-orthophoto', 'Claims::::::::::::::::::::::::::::::::', 'wms', true, false, 12, '', 'http://ot.flossola.org/geoserver/opentenure/wms', 'opentenure:claims_kebbi', '1.1.1', 'image/png', '', '', NULL, NULL, '', '', '', false, false, true);
 INSERT INTO config_map_layer (name, title, type_code, active, visible_in_start, item_order, style, url, wms_layers, wms_version, wms_format, wms_data_source, pojo_structure, pojo_query_name, pojo_query_name_for_select, shape_location, security_user, security_password, added_from_bulk_operation, use_in_public_display, use_for_ot) VALUES ('orthophoto', 'Orthophoto', 'wms', true, true, 10, NULL, 'http://localhost:8085/geoserver/katsina/wms', 'katsina:katsina', '1.1.1', 'image/jpeg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, false, false, false);
 INSERT INTO config_map_layer (name, title, type_code, active, visible_in_start, item_order, style, url, wms_layers, wms_version, wms_format, wms_data_source, pojo_structure, pojo_query_name, pojo_query_name_for_select, shape_location, security_user, security_password, added_from_bulk_operation, use_in_public_display, use_for_ot) VALUES ('sug_lga', 'Local Government Areas', 'pojo', true, true, 90, 'lga.xml', NULL, NULL, NULL, NULL, NULL, 'theGeom:Polygon,label:""', 'SpatialResult.getLGA', NULL, NULL, NULL, NULL, false, false, false);
 INSERT INTO config_map_layer (name, title, type_code, active, visible_in_start, item_order, style, url, wms_layers, wms_version, wms_format, wms_data_source, pojo_structure, pojo_query_name, pojo_query_name_for_select, shape_location, security_user, security_password, added_from_bulk_operation, use_in_public_display, use_for_ot) VALUES ('sug_ward', 'Ward', 'pojo', true, true, 80, 'ward.xml', NULL, NULL, NULL, NULL, NULL, 'theGeom:Polygon,label:""', 'SpatialResult.getWard', NULL, NULL, NULL, NULL, false, false, false);
 INSERT INTO config_map_layer (name, title, type_code, active, visible_in_start, item_order, style, url, wms_layers, wms_version, wms_format, wms_data_source, pojo_structure, pojo_query_name, pojo_query_name_for_select, shape_location, security_user, security_password, added_from_bulk_operation, use_in_public_display, use_for_ot) VALUES ('parcels-historic-current-ba', 'Historic parcels with current titles', 'pojo', false, false, 20, 'parcel_historic_current_ba.xml', NULL, NULL, NULL, NULL, NULL, 'theGeom:Polygon,label:""', 'SpatialResult.getParcelsHistoricWithCurrentBA', 'dynamic.informationtool.get_parcel_historic_current_ba', NULL, NULL, NULL, false, false, false);
-INSERT INTO config_map_layer (name, title, type_code, active, visible_in_start, item_order, style, url, wms_layers, wms_version, wms_format, wms_data_source, pojo_structure, pojo_query_name, pojo_query_name_for_select, shape_location, security_user, security_password, added_from_bulk_operation, use_in_public_display, use_for_ot) VALUES ('claims-orthophoto', 'Claims::::::::::::::::::::::::::::::::', 'wms', true, false, 12, '', 'http://ot.flossola.org/geoserver/opentenure/wms', 'opentenure:claims_kebbi', '1.1.1', 'image/png', '', '', NULL, NULL, '', '', '', false, false, true);
 
 
 ALTER TABLE config_map_layer ENABLE TRIGGER ALL;
@@ -111,13 +111,12 @@ ALTER TABLE config_map_layer ENABLE TRIGGER ALL;
 
 ALTER TABLE config_map_layer_metadata DISABLE TRIGGER ALL;
 
-INSERT INTO config_map_layer_metadata (name_layer, name, value, for_client) VALUES ('orthophoto', 'date', 'TBU DATE ??', false);
-INSERT INTO config_map_layer_metadata (name_layer, name, value, for_client) VALUES ('orthophoto', 'sheet-number', 'TBU ?? NW, SE, SW', false);
-INSERT INTO config_map_layer_metadata (name_layer, name, value, for_client) VALUES ('orthophoto', 'resolution', 'TBU 50 cm ??', false);
-INSERT INTO config_map_layer_metadata (name_layer, name, value, for_client) VALUES ('orthophoto', 'data-source', 'TBU DATUM ??', false);
 INSERT INTO config_map_layer_metadata (name_layer, name, value, for_client) VALUES ('claims-orthophoto', 'transparent', 'true', false);
 INSERT INTO config_map_layer_metadata (name_layer, name, value, for_client) VALUES ('claims-orthophoto', 'LEGEND_OPTIONS', 'fontSize:12', false);
 INSERT INTO config_map_layer_metadata (name_layer, name, value, for_client) VALUES ('claims-orthophoto', 'singleTile', 'true', true);
+INSERT INTO config_map_layer_metadata (name_layer, name, value, for_client) VALUES ('orthophoto', 'date', 'TBU DATE ??', false);
+INSERT INTO config_map_layer_metadata (name_layer, name, value, for_client) VALUES ('orthophoto', 'resolution', 'TBU 50 cm ??', false);
+INSERT INTO config_map_layer_metadata (name_layer, name, value, for_client) VALUES ('orthophoto', 'data-source', 'TBU DATUM ??', false);
 
 
 ALTER TABLE config_map_layer_metadata ENABLE TRIGGER ALL;
@@ -374,13 +373,6 @@ INSERT INTO setting (name, vl, active, description) VALUES ('email-mailer-jndi-n
 INSERT INTO setting (name, vl, active, description) VALUES ('network-scan-folder', '', false, 'Scan folder path, used by digital archive service. This setting is disabled by default. It has to be specified only if specific folder path is required (e.g. network drive). By default, system will use user''s home folder + /sola/scan');
 INSERT INTO setting (name, vl, active, description) VALUES ('product-name', 'SOLA Registry', true, 'SOLA product name');
 INSERT INTO setting (name, vl, active, description) VALUES ('product-code', 'sr', true, 'SOLA product code. sr - SOLA Registry, ssr - SOLA Systematic Registration, ssl - SOLA State Land, scs - SOLA Community Server');
-INSERT INTO setting (name, vl, active, description) VALUES ('map-west', '258697.64', true, 'The most west coordinate. It is used in the map control.');
-INSERT INTO setting (name, vl, active, description) VALUES ('map-south', '1227083.49', true, 'The most south coordinate. It is used in the map control.');
-INSERT INTO setting (name, vl, active, description) VALUES ('map-east', '516039.33', true, 'The most east coordinate. It is used in the map control.');
-INSERT INTO setting (name, vl, active, description) VALUES ('map-north', '1478420.54', true, 'The most north coordinate. It is used in the map control.');
-INSERT INTO setting (name, vl, active, description) VALUES ('surveyor', 'TBU SURVEYOR NAME', true, 'Name of Surveyor');
-INSERT INTO setting (name, vl, active, description) VALUES ('surveyorRank', 'TBU SURVEYOR RANK', true, 'The rank of the Surveyor');
-INSERT INTO setting (name, vl, active, description) VALUES ('state', 'Katsina', true, 'the state');
 INSERT INTO setting (name, vl, active, description) VALUES ('moderation_date', '2015-01-01', true, 'Closing date of public display for the claims. Date must be set in the format "yyyy-mm-dd". If date is not set or in the past, "moderation-days" setting will be used for calculating closing date.');
 INSERT INTO setting (name, vl, active, description) VALUES ('requires_spatial', '0', true, 'Indicates whether spatial representation of the parcel is required (mandatory). If values is 0, spatial part can be omitted, otherwise validation will request it.');
 INSERT INTO setting (name, vl, active, description) VALUES ('report_server_user', 'jasperadmin', true, 'Reporting server user name.');
@@ -390,6 +382,9 @@ INSERT INTO setting (name, vl, active, description) VALUES ('report_server_url',
 INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-reg-subject', 'SOLA OpenTenure - registration', true, 'Subject text for new user registration on OpenTenure Web-site. Sent to user.');
 INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-pswd-restore-subject', 'SOLA OpenTenure - password restore', true, 'Password restore subject');
 INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-submit-subject', 'SOLA OpenTenure - new claim submitted', true, 'New claim subject text');
+INSERT INTO setting (name, vl, active, description) VALUES ('map-south', '1227083.49', true, 'The most south coordinate. It is used in the map control.');
+INSERT INTO setting (name, vl, active, description) VALUES ('map-east', '516039.33', true, 'The most east coordinate. It is used in the map control.');
+INSERT INTO setting (name, vl, active, description) VALUES ('map-north', '1478420.54', true, 'The most north coordinate. It is used in the map control.');
 INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-pswd-restore-body', 'Dear #{userFullName},<br /><br />You have requested to restore the password. If you didn''t ask for this action, just ignore this message. Otherwise, follow <a href="#{passwordRestoreLink}">this link</a> to reset your password.<br /><br />Regards,<br />SOLA OpenTenure Team', true, 'Message text for password restore');
 INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-withdraw-body', 'Dear #{userFirstName},<br /><br />
 Claim <a href="#{claimLink}"><b>##{claimNumber}</b></a> has been withdrawn by community recorder.<br /><br />
@@ -459,6 +454,10 @@ INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-user-acti
 INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-user-activation-subject', 'SOLA OpenTenure account activation', true, 'Subject text to notify Community member account activation on the Community Server Web-site');
 INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-reg-body', 'Dear #{userFullName},<p></p>You have registered on SOLA OpenTenure Web-site. Before you can use your account, it will be reviewed and approved by Community Technologist. 
 Upon account approval, you will receive notification message.<p></p>Your user name is<br />#{userName}<p></p><p></p>Regards,<br />SOLA OpenTenure Team', true, 'Message text for new user registration on OpenTenure Web-site. Sent to user.');
+INSERT INTO setting (name, vl, active, description) VALUES ('map-west', '258697.64', true, 'The most west coordinate. It is used in the map control.');
+INSERT INTO setting (name, vl, active, description) VALUES ('surveyor', 'TBU SURVEYOR NAME', true, 'Name of Surveyor');
+INSERT INTO setting (name, vl, active, description) VALUES ('surveyorRank', 'TBU SURVEYOR RANK', true, 'The rank of the Surveyor');
+INSERT INTO setting (name, vl, active, description) VALUES ('state', 'Katsina', true, 'the state');
 
 
 ALTER TABLE setting ENABLE TRIGGER ALL;
