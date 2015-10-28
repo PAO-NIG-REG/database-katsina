@@ -875,7 +875,7 @@ INSERT INTO approle (code, display_value, status, description) VALUES ('ReportGe
 INSERT INTO approle (code, display_value, status, description) VALUES ('ApplnValidate', 'Appln Action - Validate::::Appln Action - Validate::::حركة طلب- التحقق من صحة البيانات::::Action Demande - Valider::::::::Ação Appln - Validar::::申请操作 - 确认', 'c', 'Required to perform the Validate applicaiton action. Allows the user to manually run the validation rules against the application. ::::Required to perform the Validate applicaiton action. Allows the user to manually run the validation rules against the application.::::مطلوبة لعمل حركة التحقق من صحة الطلب. تسمح هذه الحركة للمستخدم بالتحقق من قواعد الأعمال مع الطلب  يدويا ::::Requis pour pouvoir effectuer l''action de demande de validation. Permet à l''utilisateur de confronter manuellement les règles de validation à la demande.::::::::Necessário para executar a ação de Validação do pedido. Permite ao usuário executar manualmente as regras de validação diante do pedido.::::需要执行“确认”申请操作。允许用户手动运行确认规则。');
 INSERT INTO approle (code, display_value, status, description) VALUES ('AccessCS', 'Access Community Server', 'c', 'Allows to access Community Server as Community recorder user');
 INSERT INTO approle (code, display_value, status, description) VALUES ('ModerateClaim', 'Moderate claim', 'c', 'Allows to moderate claims submitted by other community recorders');
-
+INSERT INTO approle (code, display_value, status, description) VALUES ('ViewReports', 'View Community Server reports', 'c', 'View Community Server reports');
 
 ALTER TABLE approle ENABLE TRIGGER ALL;
 
