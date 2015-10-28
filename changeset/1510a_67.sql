@@ -1,6 +1,6 @@
 DELETE FROM system.config_map_layer_metadata  where name_layer = 'orthophoto' and "name" = 'sheet-number';
 
-INSERT INTO administrative.ba_unit_detail_type (code, display_value, description, status, is_for, field_type, order_view) VALUES ('IntellMapSheet', 'Sheet Number', 'Sheet Number', 'c', 'plan', 'TEXT', 16);
+INSERT INTO administrative.ba_unit_detail_type (code, display_value, description, status, is_for, field_type, order_view) VALUES ('IntellMapSheet', 'Sheet Number', 'Sheet Number', 'x', 'plan', 'TEXT', 16);
 
 
 
