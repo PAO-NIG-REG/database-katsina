@@ -5,7 +5,7 @@ DELETE FROM application.request_type_requires_source_type WHERE request_type_cod
 INSERT INTO application.request_type_requires_source_type (source_type_code, request_type_code) VALUES ('deed', 'subdivideProperty');
 
 UPDATE source.administrative_source_type
-   SET display_value='Diagram Image'
+   SET display_value='Diagram'
  WHERE code='cadastralSurvey';
 
 UPDATE application.request_type
