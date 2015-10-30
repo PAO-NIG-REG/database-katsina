@@ -50,17 +50,17 @@ UPDATE administrative.ba_unit_detail  SET detail_code='dateCommenced' WHERE deta
 
 UPDATE administrative.ba_unit_detail_type
    SET  status='x',
-       order_view=16
+       order_view=17
  WHERE code='estate';
 
 UPDATE administrative.ba_unit_detail_type
    SET  status='x',
-       order_view=17
+       order_view=18
  WHERE code='zone';
 
 UPDATE administrative.ba_unit_detail_type
-   SET  status='x',
-       order_view=18
+   SET  status='c',
+       order_view=16
  WHERE code='LGA';
 
 UPDATE administrative.ba_unit_detail_type

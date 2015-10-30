@@ -1,7 +1,7 @@
 
 --- This is for correctly setting up the orthophoto onto localhost
 UPDATE system.config_map_layer 
-SET url = 'http://localhost:8085/geoserver/katsina/wms',
+SET url = 'http://localhost:8085/geoserver/sola/wms',
 wms_layers= 'katsina:katsina',
 wms_format= 'image/jpeg',
 visible_in_start = TRUE,
