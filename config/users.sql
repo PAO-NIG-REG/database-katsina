@@ -228,6 +228,7 @@ INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversi
 INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('AccessCS', 'CommunityMembers', 'ac3503a8-bb9e-11e4-b25d-777354e14c1e', 1, 'i', 'db:postgres', '2015-10-12 11:17:17.685');
 INSERT INTO approle_appgroup (approle_code, appgroup_id, rowidentifier, rowversion, change_action, change_user, change_time) VALUES ('ViewReports', 'super-group-id', '2c4da65a-43f6-11e5-9c67-9f326dbd1cf8', 1, 'i', 'db:postgres', '2015-08-16 15:07:08.677');
 
+
 ALTER TABLE approle_appgroup ENABLE TRIGGER ALL;
 
 --

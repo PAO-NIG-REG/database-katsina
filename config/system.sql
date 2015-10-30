@@ -385,6 +385,7 @@ INSERT INTO setting (name, vl, active, description) VALUES ('map-west', '258697.
 INSERT INTO setting (name, vl, active, description) VALUES ('map-south', '1227083.49', true, 'The most south coordinate. It is used in the map control.');
 INSERT INTO setting (name, vl, active, description) VALUES ('map-east', '516039.33', true, 'The most east coordinate. It is used in the map control.');
 INSERT INTO setting (name, vl, active, description) VALUES ('map-north', '1478420.54', true, 'The most north coordinate. It is used in the map control.');
+INSERT INTO setting (name, vl, active, description) VALUES ('surveyorRank', 'TBU SURVEYOR RANK', true, 'The rank of the Surveyor');
 INSERT INTO setting (name, vl, active, description) VALUES ('state', 'Katsina', true, 'the state');
 INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-pswd-restore-body', 'Dear #{userFullName},<br /><br />You have requested to restore the password. If you didn''t ask for this action, just ignore this message. Otherwise, follow <a href="#{passwordRestoreLink}">this link</a> to reset your password.<br /><br />Regards,<br />SOLA OpenTenure Team', true, 'Message text for password restore');
 INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-claim-withdraw-body', 'Dear #{userFirstName},<br /><br />
@@ -455,9 +456,8 @@ INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-user-acti
 INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-user-activation-subject', 'SOLA OpenTenure account activation', true, 'Subject text to notify Community member account activation on the Community Server Web-site');
 INSERT INTO setting (name, vl, active, description) VALUES ('email-msg-reg-body', 'Dear #{userFullName},<p></p>You have registered on SOLA OpenTenure Web-site. Before you can use your account, it will be reviewed and approved by Community Technologist. 
 Upon account approval, you will receive notification message.<p></p>Your user name is<br />#{userName}<p></p><p></p>Regards,<br />SOLA OpenTenure Team', true, 'Message text for new user registration on OpenTenure Web-site. Sent to user.');
-INSERT INTO setting (name, vl, active, description) VALUES ('surveyor', 'TBU SURVEYOR NAME', true, 'Name of Surveyor');
-INSERT INTO setting (name, vl, active, description) VALUES ('surveyorRank', 'TBU SURVEYOR RANK', true, 'The rank of the Surveyor');
 INSERT INTO setting (name, vl, active, description) VALUES ('system-id', 'KT', true, 'A unique number that identifies the installed SOLA system. This unique number is used in the br that generate unique identifiers.');
+INSERT INTO setting (name, vl, active, description) VALUES ('surveyor', 'TBU SURVEYOR NAME', true, 'Name of Surveyor');
 
 
 ALTER TABLE setting ENABLE TRIGGER ALL;
