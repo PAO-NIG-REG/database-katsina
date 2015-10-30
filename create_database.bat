@@ -19,7 +19,7 @@ SET port=5432
 SET dbname=sola
 SET username=postgres
 SET createDb=N
-SET fillWithSampleData=Y
+SET fillWithSampleData=N
 
 REM Prompt the user for variable override values
 SET /p host= Host name [%host%] :
@@ -28,7 +28,7 @@ SET /p dbname= Database name [%dbname%] :
 SET /p username= Username [%username%] :
 SET /p pword= DB Password [?] :
 SET /p createDb= Create or replace the database? (Y/N) [%createDb%] :
-SET /p fillWithSampleData= Fill database with sample data? (Y/N) [%fillWithSampleData%] :
+REM  SET /p fillWithSampleData= Fill database with sample data? (Y/N) [%fillWithSampleData%] :
 
 REM Get the password from the command line and set the PGPASSWORD environ variable
 SET PGPASSWORD=%pword%
