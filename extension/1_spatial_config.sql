@@ -5,7 +5,7 @@ SET url = 'http://localhost:8085/geoserver/sola/wms',
 wms_layers= 'katsina:katsina',
 wms_format= 'image/jpeg',
 visible_in_start = TRUE,
-active = TRUE
+active = FALSE
 WHERE name='orthophoto';
 
 --- This is for correctly setting up the orthophoto onto katsina land ministry server
