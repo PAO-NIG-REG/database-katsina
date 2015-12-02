@@ -6065,7 +6065,17 @@ CREATE TABLE rrr (
     change_user character varying(50),
     change_time timestamp without time zone DEFAULT now() NOT NULL,
     classification_code character varying(20),
-    redact_code character varying(20)
+    redact_code character varying(20),
+    instrument_registration_no character varying(255),
+    date_commenced date,
+    date_signed date,
+    cofo character varying(255),
+    term integer,
+    zone_code character varying(255),
+    rot_code character varying(255),
+    advance_payment numeric(29,0),
+    yearly_rent numeric(19,0),
+    review_period integer
 );
 
 
@@ -6310,7 +6320,17 @@ CREATE TABLE rrr_historic (
     change_time timestamp without time zone,
     change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL,
     classification_code character varying(20),
-    redact_code character varying(20)
+    redact_code character varying(20),
+    instrument_registration_no character varying(255),
+    date_commenced date,
+    date_signed date,
+    cofo character varying(255),
+    term integer,
+    zone_code character varying(255),
+    rot_code character varying(255),
+    advance_payment numeric(29,0),
+    yearly_rent numeric(19,0),
+    review_period integer
 );
 
 
@@ -6336,6 +6356,56 @@ ALTER TABLE administrative.rrr_nr_seq OWNER TO postgres;
 --
 
 COMMENT ON SEQUENCE rrr_nr_seq IS 'Sequence number used as the basis for the RRR Nr field. This sequence is used by the generate-rrr-nr business rule.';
+
+
+--
+-- Name: rrr_occupancy_type; Type: TABLE; Schema: administrative; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE rrr_occupancy_type (
+    code character varying(20) NOT NULL,
+    display_value character varying(500) NOT NULL,
+    description character varying(1000),
+    status character(1) DEFAULT 't'::bpchar NOT NULL
+);
+
+
+ALTER TABLE administrative.rrr_occupancy_type OWNER TO postgres;
+
+--
+-- Name: TABLE rrr_occupancy_type; Type: COMMENT; Schema: administrative; Owner: postgres
+--
+
+COMMENT ON TABLE rrr_occupancy_type IS 'Code list of rot.. 
+  Tags: Reference Table, LADM Reference Object';
+
+
+--
+-- Name: COLUMN rrr_occupancy_type.code; Type: COMMENT; Schema: administrative; Owner: postgres
+--
+
+COMMENT ON COLUMN rrr_occupancy_type.code IS 'LADM Definition: The code for the rot.';
+
+
+--
+-- Name: COLUMN rrr_occupancy_type.display_value; Type: COMMENT; Schema: administrative; Owner: postgres
+--
+
+COMMENT ON COLUMN rrr_occupancy_type.display_value IS 'LADM Definition: Displayed value of the rot.';
+
+
+--
+-- Name: COLUMN rrr_occupancy_type.description; Type: COMMENT; Schema: administrative; Owner: postgres
+--
+
+COMMENT ON COLUMN rrr_occupancy_type.description IS 'LADM Definition: Description of the rot.';
+
+
+--
+-- Name: COLUMN rrr_occupancy_type.status; Type: COMMENT; Schema: administrative; Owner: postgres
+--
+
+COMMENT ON COLUMN rrr_occupancy_type.status IS 'SOLA Extension: Status of the rot';
 
 
 --
@@ -7092,6 +7162,10 @@ CREATE TABLE cadastre_object (
     change_time timestamp without time zone DEFAULT now() NOT NULL,
     classification_code character varying(20),
     redact_code character varying(20),
+    block character varying(255),
+    plot_num character varying(255),
+    lga_code character varying(255),
+    intell_map_sheet character varying(255),
     CONSTRAINT enforce_dims_geom_polygon CHECK ((public.st_ndims(geom_polygon) = 2)),
     CONSTRAINT enforce_geotype_geom_polygon CHECK (((public.geometrytype(geom_polygon) = 'POLYGON'::text) OR (geom_polygon IS NULL))),
     CONSTRAINT enforce_srid_geom_polygon CHECK ((public.st_srid(geom_polygon) = 32632)),
@@ -9453,6 +9527,10 @@ CREATE TABLE cadastre_object_historic (
     change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL,
     classification_code character varying(20),
     redact_code character varying(20),
+    block character varying(255),
+    plot_num character varying(255),
+    lga_code character varying(255),
+    intell_map_sheet character varying(255),
     CONSTRAINT enforce_dims_geom_polygon CHECK ((public.st_ndims(geom_polygon) = 2)),
     CONSTRAINT enforce_geotype_geom_polygon CHECK (((public.geometrytype(geom_polygon) = 'POLYGON'::text) OR (geom_polygon IS NULL))),
     CONSTRAINT enforce_srid_geom_polygon CHECK ((public.st_srid(geom_polygon) = 32632)),
@@ -10331,6 +10409,56 @@ CREATE VIEW lga AS
 ALTER TABLE cadastre.lga OWNER TO postgres;
 
 --
+-- Name: lga_type; Type: TABLE; Schema: cadastre; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE lga_type (
+    code character varying(20) NOT NULL,
+    display_value character varying(500) NOT NULL,
+    description character varying(1000),
+    status character(1) DEFAULT 't'::bpchar NOT NULL
+);
+
+
+ALTER TABLE cadastre.lga_type OWNER TO postgres;
+
+--
+-- Name: TABLE lga_type; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON TABLE lga_type IS 'Code list of lgas.. 
+  Tags: Reference Table, LADM Reference Object';
+
+
+--
+-- Name: COLUMN lga_type.code; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN lga_type.code IS 'LADM Definition: The code for the lga.';
+
+
+--
+-- Name: COLUMN lga_type.display_value; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN lga_type.display_value IS 'LADM Definition: Displayed value of the lga.';
+
+
+--
+-- Name: COLUMN lga_type.description; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN lga_type.description IS 'LADM Definition: Description of the lga.';
+
+
+--
+-- Name: COLUMN lga_type.status; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN lga_type.status IS 'SOLA Extension: Status of the lga';
+
+
+--
 -- Name: parcel_plan; Type: VIEW; Schema: cadastre; Owner: postgres
 --
 
@@ -11202,6 +11330,56 @@ CREATE VIEW ward AS
 
 
 ALTER TABLE cadastre.ward OWNER TO postgres;
+
+--
+-- Name: zone_type; Type: TABLE; Schema: cadastre; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE zone_type (
+    code character varying(20) NOT NULL,
+    display_value character varying(500) NOT NULL,
+    description character varying(1000),
+    status character(1) DEFAULT 't'::bpchar NOT NULL
+);
+
+
+ALTER TABLE cadastre.zone_type OWNER TO postgres;
+
+--
+-- Name: TABLE zone_type; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON TABLE zone_type IS 'Code list of zones.. 
+  Tags: Reference Table, LADM Reference Object';
+
+
+--
+-- Name: COLUMN zone_type.code; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN zone_type.code IS 'LADM Definition: The code for the zone.';
+
+
+--
+-- Name: COLUMN zone_type.display_value; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN zone_type.display_value IS 'LADM Definition: Displayed value of the zone.';
+
+
+--
+-- Name: COLUMN zone_type.description; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN zone_type.description IS 'LADM Definition: Description of the zone.';
+
+
+--
+-- Name: COLUMN zone_type.status; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN zone_type.status IS 'SOLA Extension: Status of the zone';
+
 
 SET search_path = document, pg_catalog;
 
@@ -17871,6 +18049,22 @@ ALTER TABLE ONLY required_relationship_baunit
 
 
 --
+-- Name: rot_display_value_unique; Type: CONSTRAINT; Schema: administrative; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY rrr_occupancy_type
+    ADD CONSTRAINT rot_display_value_unique UNIQUE (display_value);
+
+
+--
+-- Name: rot_pkey; Type: CONSTRAINT; Schema: administrative; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY rrr_occupancy_type
+    ADD CONSTRAINT rot_pkey PRIMARY KEY (code);
+
+
+--
 -- Name: rrr_group_type_display_value_unique; Type: CONSTRAINT; Schema: administrative; Owner: postgres; Tablespace: 
 --
 
@@ -18341,6 +18535,22 @@ ALTER TABLE ONLY level
 
 
 --
+-- Name: lga_pkey; Type: CONSTRAINT; Schema: cadastre; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY lga_type
+    ADD CONSTRAINT lga_pkey PRIMARY KEY (code);
+
+
+--
+-- Name: lga_type_display_value_unique; Type: CONSTRAINT; Schema: cadastre; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY lga_type
+    ADD CONSTRAINT lga_type_display_value_unique UNIQUE (display_value);
+
+
+--
 -- Name: register_type_display_value_unique; Type: CONSTRAINT; Schema: cadastre; Owner: postgres; Tablespace: 
 --
 
@@ -18466,6 +18676,22 @@ ALTER TABLE ONLY utility_network_type
 
 ALTER TABLE ONLY utility_network_type
     ADD CONSTRAINT utility_network_type_pkey PRIMARY KEY (code);
+
+
+--
+-- Name: zone_pkey; Type: CONSTRAINT; Schema: cadastre; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY zone_type
+    ADD CONSTRAINT zone_pkey PRIMARY KEY (code);
+
+
+--
+-- Name: zone_type_display_value_unique; Type: CONSTRAINT; Schema: cadastre; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY zone_type
+    ADD CONSTRAINT zone_type_display_value_unique UNIQUE (display_value);
 
 
 SET search_path = document, pg_catalog;
@@ -22650,6 +22876,14 @@ ALTER TABLE ONLY rrr
 
 
 --
+-- Name: rrr_rot_code_fk47; Type: FK CONSTRAINT; Schema: administrative; Owner: postgres
+--
+
+ALTER TABLE ONLY rrr
+    ADD CONSTRAINT rrr_rot_code_fk47 FOREIGN KEY (rot_code) REFERENCES rrr_occupancy_type(code) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: rrr_share_rrr_id_fk79; Type: FK CONSTRAINT; Schema: administrative; Owner: postgres
 --
 
@@ -22695,6 +22929,14 @@ ALTER TABLE ONLY rrr_type
 
 ALTER TABLE ONLY rrr_type
     ADD CONSTRAINT rrr_type_rrr_group_type_code_fk22 FOREIGN KEY (rrr_group_type_code) REFERENCES rrr_group_type(code) ON UPDATE CASCADE ON DELETE RESTRICT;
+
+
+--
+-- Name: rrr_zone_type_code_fk46; Type: FK CONSTRAINT; Schema: administrative; Owner: postgres
+--
+
+ALTER TABLE ONLY rrr
+    ADD CONSTRAINT rrr_zone_type_code_fk46 FOREIGN KEY (zone_code) REFERENCES cadastre.zone_type(code) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --
