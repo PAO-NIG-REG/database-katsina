@@ -132,6 +132,12 @@ INSERT INTO cadastre.zone_type(
 
 ---------------------------------------------------------------------------
 DROP VIEW application.systematic_registration_certificates;
+DROP TABLE IF EXISTS administrative.ba_unit_detail;
+DROP TABLE IF EXISTS administrative.ba_unit_detail_historic;
+DROP TABLE IF EXISTS administrative.ba_unit_detail_type;
+DROP FUNCTION  IF EXISTS administrative.get_baunit_detail(ba_unit_id character varying, detail_code character varying , is_for character varying) CASCADE;
+DROP VIEW IF EXISTS cadastre.parcel_plan ;
+
 CREATE OR REPLACE VIEW application.systematic_registration_certificates AS 
   SELECT DISTINCT 
     
@@ -258,8 +264,3 @@ CREATE OR REPLACE VIEW application.systematic_registration_certificates AS
   ORDER BY co.name_firstpart, co.name_lastpart;
 -------------------------------------------------------------------------------------------------
 -------------------------------------------------------------------------------------------------
-
----------------------------------------------------------------------------
-DROP VIEW IF EXISTS cadastre.parcel_plan ;
-
-	
