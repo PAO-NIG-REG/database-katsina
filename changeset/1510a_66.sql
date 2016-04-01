@@ -1,4 +1,4 @@
-INSERT INTO system.version SELECT '1510a' WHERE NOT EXISTS (SELECT version_num FROM system.version WHERE version_num = '1510a');
+﻿INSERT INTO system.version SELECT '1510a' WHERE NOT EXISTS (SELECT version_num FROM system.version WHERE version_num = '1510a');
 --
 -- PostgreSQL database dump
 --
