@@ -1,4 +1,4 @@
-﻿
+
 delete from system.setting where name = 'map-srid';
 Insert into system.setting (vl,"name", description)  select srid , 'map-srid', 'srid for the map' from system.crs where item_order=1 ; 
 
@@ -40,3 +40,6 @@ ALTER FUNCTION get_geometry_with_srid(geometry)
   OWNER TO postgres;
 COMMENT ON FUNCTION get_geometry_with_srid(geometry) IS 'This function assigns a srid found in the settings to the geometry passed as parameter. The srid is chosen based in the longitude where the centroid of the geometry is.';
 
+INSERT INTO system.version SELECT '1601' WHERE NOT EXISTS (SELECT version_num FROM system.version WHERE version_num = '1601');
+INSERT INTO system.version SELECT '1603a' WHERE NOT EXISTS (SELECT version_num FROM system.version WHERE version_num = '1603a');
+INSERT INTO system.version SELECT '1603b' WHERE NOT EXISTS (SELECT version_num FROM system.version WHERE version_num = '1603b');
