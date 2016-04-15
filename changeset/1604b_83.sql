@@ -101,32 +101,5 @@ ALTER FUNCTION application.get_concatenated_name(character varying)
   OWNER TO postgres;
 COMMENT ON FUNCTION application.get_concatenated_name(character varying) IS 'Returns a concatenated list of all cadastre objects associated to the BA Unit referenced by the application.';
 
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-WITH cadastreDocs AS 	(SELECT DISTINCT ON (id) ss.id, ext_archive_id FROM source.source ss
-				INNER JOIN transaction.transaction_source ts ON (ss.id = ts.source_id)
-				INNER JOIN transaction.transaction tn ON(ts.transaction_id = tn.id)
-				WHERE tn.from_service_id = #{id}
-				ORDER BY 1),
-	rrrDocs AS	(SELECT DISTINCT ON (id) ss.id, ext_archive_id FROM source.source ss
-				INNER JOIN administrative.source_describes_rrr sr ON (ss.id = sr.source_id)
-				INNER JOIN administrative.rrr rr ON (sr.rrr_id = rr.id)
-				INNER JOIN transaction.transaction tn ON(rr.transaction_id = tn.id)
-				WHERE tn.from_service_id = #{id}
-				ORDER BY 1),
-     titleDocs AS	(SELECT DISTINCT ON (id) ss.id, ext_archive_id FROM source.source ss
-				INNER JOIN administrative.source_describes_ba_unit su ON (ss.id = su.source_id)
-				WHERE su.ba_unit_id IN (SELECT  ba_unit_id FROM rrrDocs)
-				ORDER BY 1),
-     regDocs AS		(SELECT DISTINCT ON (id) ss.id, ext_archive_id FROM source.source ss
-				INNER JOIN transaction.transaction tn ON (ss.transaction_id = tn.id)
-				INNER JOIN application.service sv ON (tn.from_service_id = sv.id)
-				WHERE sv.id = #{id}
-				AND sv.request_type_code IN ('regnPowerOfAttorney', 'regnStandardDocument', 'cnclPowerOfAttorney', 'cnclStandardDocument')
-				ORDER BY 1),
-     serviceDocs AS	((SELECT * FROM rrrDocs) UNION (SELECT * FROM cadastreDocs) UNION (SELECT * FROM titleDocs) UNION (SELECT * FROM regDocs))
-     
-     
- SELECT (((SELECT COUNT(*) FROM serviceDocs) - (SELECT COUNT(*) FROM serviceDocs WHERE ext_archive_id IS NOT NULL)) = 0) AS vl
-
 
 INSERT INTO system.version SELECT '1604b' WHERE NOT EXISTS (SELECT version_num FROM system.version WHERE version_num = '1604b');
