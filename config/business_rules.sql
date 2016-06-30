@@ -140,6 +140,7 @@ INSERT INTO br (id, display_name, technical_type_code, feedback, description, te
 INSERT INTO br (id, display_name, technical_type_code, feedback, description, technical_description) VALUES ('cancel-relation-notification', 'cancel-relation-notification', 'sql', 'Cancel notification for the services of the application', NULL, '#{id}(application_id) is requested');
 INSERT INTO br (id, display_name, technical_type_code, feedback, description, technical_description) VALUES ('delete-relation-notification', 'delete-relation-notification', 'sql', 'Delete notification for the services of the application', NULL, '#{id}(application_id) is requested');
 INSERT INTO br (id, display_name, technical_type_code, feedback, description, technical_description) VALUES ('generate-cofo-nr', 'generate-cofo-nr', 'sql', '...::::::::...::::::::::::::::...::::::::...', NULL, '');
+INSERT INTO br (id, display_name, technical_type_code, feedback, description, technical_description) VALUES ('diagram-is-jpg', 'diagram-is-jpg', 'sql', 'Primary right created by the service must have a Diagram document attached and the Diagram must be in jpg format', NULL, '#{id}(application.service.id)');
 
 
 ALTER TABLE br ENABLE TRIGGER ALL;
@@ -1065,6 +1066,24 @@ INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('appl
 				ELSE null
 				END AS vl FROM newFreeholdApp');
 INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('generate-cofo-nr', '2014-02-20', 'infinity', 'SELECT coalesce(system.get_setting(''system-id''), '''') || to_char(now(), ''yymm'') || trim(to_char(nextval(''administrative.cofo_nr_seq''), ''0000'')) AS vl');
+INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('diagram-is-jpg', '2014-02-20', 'infinity', 'Select count (d.id) > 0 AS vl
+from document.document d, 
+source.source s,
+administrative.source_describes_rrr  sdr,
+administrative.rrr rrr,
+transaction.transaction t,
+application.service ser
+where s.ext_archive_id = d.id
+and s.type_code = ''cadastralSurvey''
+and upper(d.extension) = ''JPG''
+and sdr.source_id = s.id
+and sdr.rrr_id = rrr.id
+and rrr.type_code = ''ownership''
+and rrr.transaction_id = t.id 
+and t.from_service_id = ser.id
+and ser.request_type_code in (''newFreehold'',''newDigitalTitle'',''newOwnership'')
+and ser.id = #{id}
+');
 
 
 ALTER TABLE br_definition ENABLE TRIGGER ALL;
@@ -1164,6 +1183,9 @@ INSERT INTO br_validation (id, br_id, target_code, target_application_moment, ta
 INSERT INTO br_validation (id, br_id, target_code, target_application_moment, target_service_moment, target_reg_moment, target_request_type_code, target_rrr_type_code, severity_code, order_of_execution) VALUES ('bfc0ec2c-99dd-11e3-bc3f-13923fd8d236', 'spatial-unit-group-inside-other-spatial-unit-group', 'spatial_unit_group', NULL, NULL, NULL, NULL, NULL, 'medium', 2);
 INSERT INTO br_validation (id, br_id, target_code, target_application_moment, target_service_moment, target_reg_moment, target_request_type_code, target_rrr_type_code, severity_code, order_of_execution) VALUES ('cancel-relation-notification', 'cancel-relation-notification', 'application', 'approve', NULL, NULL, NULL, NULL, 'warning', 300);
 INSERT INTO br_validation (id, br_id, target_code, target_application_moment, target_service_moment, target_reg_moment, target_request_type_code, target_rrr_type_code, severity_code, order_of_execution) VALUES ('delete-relation-notification', 'delete-relation-notification', 'application', 'archive', NULL, NULL, NULL, NULL, 'warning', 300);
+INSERT INTO br_validation (id, br_id, target_code, target_application_moment, target_service_moment, target_reg_moment, target_request_type_code, target_rrr_type_code, severity_code, order_of_execution) VALUES ('diagram-is-jpg1', 'diagram-is-jpg', 'service', NULL, 'complete', NULL, 'newFreehold', NULL, 'critical', 751);
+INSERT INTO br_validation (id, br_id, target_code, target_application_moment, target_service_moment, target_reg_moment, target_request_type_code, target_rrr_type_code, severity_code, order_of_execution) VALUES ('diagram-is-jpg2', 'diagram-is-jpg', 'service', NULL, 'complete', NULL, 'newDigitalTitle', NULL, 'critical', 752);
+INSERT INTO br_validation (id, br_id, target_code, target_application_moment, target_service_moment, target_reg_moment, target_request_type_code, target_rrr_type_code, severity_code, order_of_execution) VALUES ('diagram-is-jpg3', 'diagram-is-jpg', 'service', NULL, 'complete', NULL, 'newOwnership', NULL, 'critical', 753);
 
 
 ALTER TABLE br_validation ENABLE TRIGGER ALL;

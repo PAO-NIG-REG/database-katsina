@@ -10,6 +10,12 @@
 --registerLease - Application, lease (this is already present in the link table)
 --newOwnership - Application
 
+
+INSERT INTO source.administrative_source_type(
+            code, display_value, status, description, is_for_registration)
+    VALUES ('application', 'Application', 'c', '', false);
+
+
 --New CofO - Diagram, Application
 INSERT INTO application.request_type_requires_source_type(
             source_type_code, request_type_code)

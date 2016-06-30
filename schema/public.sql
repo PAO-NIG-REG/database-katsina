@@ -4,7 +4,7 @@ CREATE OR REPLACE FUNCTION  public.uuid_generate_v1()
 '$libdir/uuid-ossp', 'uuid_generate_v1'
   LANGUAGE c VOLATILE STRICT
   COST 1;
-
+ 
 -- Function public.f_for_trg_track_changes --
 CREATE OR REPLACE FUNCTION public.f_for_trg_track_changes(
 
@@ -158,27 +158,34 @@ ALTER FUNCTION compare_strings(character varying, character varying)
   OWNER TO postgres;
 COMMENT ON FUNCTION compare_strings(character varying, character varying) IS E'Special string compare function. Allows spaces to be recognized as valid search parameters when entered as \s';
     
--- Function public.get_geometry_with_srid --
-CREATE OR REPLACE FUNCTION public.get_geometry_with_srid(
- geom geometry
-) RETURNS geometry 
-AS $$
+
+-- Function: get_geometry_with_srid(geometry)
+
+-- DROP FUNCTION get_geometry_with_srid(geometry);
+
+CREATE OR REPLACE FUNCTION public.get_geometry_with_srid(geom geometry)
+  RETURNS geometry AS
+$BODY$
 declare
   srid_found integer;
   x float;
 begin
-  if (select count(*) from system.crs) = 1 then
-    return geom;
-  end if;
+ 
   x = st_x(st_transform(st_centroid(geom), 4326));
   srid_found = (select srid from system.crs where x >= from_long and x < to_long );
-  return st_transform(geom, srid_found);
+ 
+   return 
+   ST_Transform(
+   ST_GeomFromText(
+   ST_AsText(ST_GeometryN(geom, 1)),ST_SRID(geom)),srid_found);
 end;
-$$ LANGUAGE plpgsql;
-COMMENT ON FUNCTION public.get_geometry_with_srid(
- geom geometry
-) IS 'This function assigns a srid found in the settings to the geometry passed as parameter. The srid is chosen based in the longitude where the centroid of the geometry is.';
-    
+$BODY$
+  LANGUAGE plpgsql VOLATILE
+  COST 100;
+ALTER FUNCTION public.get_geometry_with_srid(geometry)
+  OWNER TO postgres;
+COMMENT ON FUNCTION public.get_geometry_with_srid(geometry) IS 'This function assigns a srid found in the settings to the geometry passed as parameter. The srid is chosen based in the longitude where the centroid of the geometry is.';
+
 -- Function public.get_translation --
 CREATE OR REPLACE FUNCTION public.get_translation(mixed_value character varying, language_code character varying)
   RETURNS character varying AS

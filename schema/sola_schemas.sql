@@ -343,8 +343,8 @@ BEGIN
            Select pippo.firstpart||'/'||pippo.lastpart || ' ' || pippo.cadtype  as value
    from 
    administrative.ba_unit bu join
-	   (select co.name_firstpart firstpart,
-	   co.name_lastpart lastpart,
+	   (select coalesce (co.name_firstpart, '') firstpart,
+	     replace(coalesce (co.name_lastpart, ''),'null', '' )lastpart,
 	    get_translation(cot.display_value, null) cadtype,
 	   bsu.ba_unit_id unit_id
 	   from administrative.ba_unit_contains_spatial_unit  bsu
@@ -363,6 +363,7 @@ BEGIN
 	if substr(name, 1, 1) = ',' then
           name = substr(name,2);
         end if;
+      
 return name;
 END;
 
@@ -2461,8 +2462,8 @@ BEGIN
 		from application.service s 
 		join application.application_property ap on (s.application_id=ap.application_id)
 		join administrative.ba_unit bu on (ap.name_firstpart||ap.name_lastpart=bu.name_firstpart||bu.name_lastpart)
-		join (select co.name_firstpart firstpart,
-			   co.name_lastpart lastpart,
+		join  (select coalesce (co.name_firstpart, '') firstpart,
+	     replace(coalesce (co.name_lastpart, ''),'null', '' )lastpart,
 			   get_translation(cot.display_value, null) cadtype,
 			   bsu.ba_unit_id unit_id,
 			   co.id id
@@ -4854,194 +4855,6 @@ CREATE TABLE ba_unit_contains_spatial_unit_historic (
 
 
 ALTER TABLE administrative.ba_unit_contains_spatial_unit_historic OWNER TO postgres;
-
---
--- Name: ba_unit_detail; Type: TABLE; Schema: administrative; Owner: postgres; Tablespace: 
---
-
-CREATE TABLE ba_unit_detail (
-    id character varying(40) NOT NULL,
-    ba_unit_id character varying(40) NOT NULL,
-    detail_code character varying(255),
-    custom_detail_text character varying(500),
-    detail_quantity integer,
-    detail_unit character varying(15),
-    rowidentifier character varying(40) DEFAULT public.uuid_generate_v1() NOT NULL,
-    rowversion integer DEFAULT 0 NOT NULL,
-    change_action character(1) DEFAULT 'i'::bpchar NOT NULL,
-    change_user character varying(50),
-    change_time timestamp without time zone DEFAULT now() NOT NULL
-);
-
-
-ALTER TABLE administrative.ba_unit_detail OWNER TO postgres;
-
---
--- Name: TABLE ba_unit_detail; Type: COMMENT; Schema: administrative; Owner: postgres
---
-
-COMMENT ON TABLE ba_unit_detail IS 'Captures any statutory or agreed details in relation to an ba_unit. E.g. details of lease, etc. An ba_unit can have multiple details associated to it.
-Tags: FLOSS SOLA Extension, Change History';
-
-
---
--- Name: COLUMN ba_unit_detail.id; Type: COMMENT; Schema: administrative; Owner: postgres
---
-
-COMMENT ON COLUMN ba_unit_detail.id IS 'Identifier for the detail.';
-
-
---
--- Name: COLUMN ba_unit_detail.ba_unit_id; Type: COMMENT; Schema: administrative; Owner: postgres
---
-
-COMMENT ON COLUMN ba_unit_detail.ba_unit_id IS 'Identifier of the ba_unit the detail relates to.';
-
-
---
--- Name: COLUMN ba_unit_detail.detail_code; Type: COMMENT; Schema: administrative; Owner: postgres
---
-
-COMMENT ON COLUMN ba_unit_detail.detail_code IS 'The type of detail.';
-
-
---
--- Name: COLUMN ba_unit_detail.custom_detail_text; Type: COMMENT; Schema: administrative; Owner: postgres
---
-
-COMMENT ON COLUMN ba_unit_detail.custom_detail_text IS 'User entered text describing the detail and/or updated or revised text obtained from the template detail text.';
-
-
---
--- Name: COLUMN ba_unit_detail.detail_quantity; Type: COMMENT; Schema: administrative; Owner: postgres
---
-
-COMMENT ON COLUMN ba_unit_detail.detail_quantity IS 'A quantity value associted to the detail.';
-
-
---
--- Name: COLUMN ba_unit_detail.detail_unit; Type: COMMENT; Schema: administrative; Owner: postgres
---
-
-COMMENT ON COLUMN ba_unit_detail.detail_unit IS 'The unit of measure applicable for the detail quantity.';
-
-
---
--- Name: COLUMN ba_unit_detail.rowidentifier; Type: COMMENT; Schema: administrative; Owner: postgres
---
-
-COMMENT ON COLUMN ba_unit_detail.rowidentifier IS 'Identifies the all change records for the row in the ba_unit_detail_historic table';
-
-
---
--- Name: COLUMN ba_unit_detail.rowversion; Type: COMMENT; Schema: administrative; Owner: postgres
---
-
-COMMENT ON COLUMN ba_unit_detail.rowversion IS 'Sequential value indicating the number of times this row has been modified.';
-
-
---
--- Name: COLUMN ba_unit_detail.change_action; Type: COMMENT; Schema: administrative; Owner: postgres
---
-
-COMMENT ON COLUMN ba_unit_detail.change_action IS 'Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d).';
-
-
---
--- Name: COLUMN ba_unit_detail.change_user; Type: COMMENT; Schema: administrative; Owner: postgres
---
-
-COMMENT ON COLUMN ba_unit_detail.change_user IS 'The user id of the last person to modify the row.';
-
-
---
--- Name: COLUMN ba_unit_detail.change_time; Type: COMMENT; Schema: administrative; Owner: postgres
---
-
-COMMENT ON COLUMN ba_unit_detail.change_time IS 'The date and time the row was last modified.';
-
-
---
--- Name: ba_unit_detail_historic; Type: TABLE; Schema: administrative; Owner: postgres; Tablespace: 
---
-
-CREATE TABLE ba_unit_detail_historic (
-    id character varying(40),
-    ba_unit_id character varying(40),
-    detail_code character varying(255),
-    custom_detail_text character varying(500),
-    detail_quantity integer,
-    detail_unit character varying(15),
-    rowidentifier character varying(40),
-    rowversion integer,
-    change_action character(1),
-    change_user character varying(50),
-    change_time timestamp without time zone,
-    change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL
-);
-
-
-ALTER TABLE administrative.ba_unit_detail_historic OWNER TO postgres;
-
---
--- Name: COLUMN ba_unit_detail_historic.detail_code; Type: COMMENT; Schema: administrative; Owner: postgres
---
-
-COMMENT ON COLUMN ba_unit_detail_historic.detail_code IS 'The type of detail.';
-
-
---
--- Name: ba_unit_detail_type; Type: TABLE; Schema: administrative; Owner: postgres; Tablespace: 
---
-
-CREATE TABLE ba_unit_detail_type (
-    code character varying(255) NOT NULL,
-    display_value character varying(500) NOT NULL,
-    description character varying(10000) NOT NULL,
-    status character(1) NOT NULL,
-    is_for character varying(20),
-    field_type character varying(20),
-    order_view integer
-);
-
-
-ALTER TABLE administrative.ba_unit_detail_type OWNER TO postgres;
-
---
--- Name: TABLE ba_unit_detail_type; Type: COMMENT; Schema: administrative; Owner: postgres
---
-
-COMMENT ON TABLE ba_unit_detail_type IS 'Code list of detail types. 
-Tags: FLOSS SOLA Extension, Reference Table';
-
-
---
--- Name: COLUMN ba_unit_detail_type.code; Type: COMMENT; Schema: administrative; Owner: postgres
---
-
-COMMENT ON COLUMN ba_unit_detail_type.code IS 'The code for the detail type.';
-
-
---
--- Name: COLUMN ba_unit_detail_type.display_value; Type: COMMENT; Schema: administrative; Owner: postgres
---
-
-COMMENT ON COLUMN ba_unit_detail_type.display_value IS 'Displayed value of the detail type.';
-
-
---
--- Name: COLUMN ba_unit_detail_type.description; Type: COMMENT; Schema: administrative; Owner: postgres
---
-
-COMMENT ON COLUMN ba_unit_detail_type.description IS 'The template text describing the detail.';
-
-
---
--- Name: COLUMN ba_unit_detail_type.status; Type: COMMENT; Schema: administrative; Owner: postgres
---
-
-COMMENT ON COLUMN ba_unit_detail_type.status IS 'Status of the detail type.';
-
 
 --
 -- Name: ba_unit_first_name_part_seq; Type: SEQUENCE; Schema: administrative; Owner: postgres
@@ -9166,6 +8979,182 @@ COMMENT ON COLUMN service_status_type.status IS 'Status of the service status ty
 COMMENT ON COLUMN service_status_type.description IS 'Description of the service status type.';
 
 
+SET search_path = cadastre, pg_catalog;
+
+--
+-- Name: lga_type; Type: TABLE; Schema: cadastre; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE lga_type (
+    code character varying(20) NOT NULL,
+    display_value character varying(500) NOT NULL,
+    description character varying(1000),
+    status character(1) DEFAULT 't'::bpchar NOT NULL
+);
+
+
+ALTER TABLE cadastre.lga_type OWNER TO postgres;
+
+--
+-- Name: TABLE lga_type; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON TABLE lga_type IS 'Code list of lgas.. 
+  Tags: Reference Table, LADM Reference Object';
+
+
+--
+-- Name: COLUMN lga_type.code; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN lga_type.code IS 'LADM Definition: The code for the lga.';
+
+
+--
+-- Name: COLUMN lga_type.display_value; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN lga_type.display_value IS 'LADM Definition: Displayed value of the lga.';
+
+
+--
+-- Name: COLUMN lga_type.description; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN lga_type.description IS 'LADM Definition: Description of the lga.';
+
+
+--
+-- Name: COLUMN lga_type.status; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN lga_type.status IS 'SOLA Extension: Status of the lga';
+
+
+--
+-- Name: spatial_unit_address; Type: TABLE; Schema: cadastre; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE spatial_unit_address (
+    spatial_unit_id character varying(40) NOT NULL,
+    address_id character varying(40) NOT NULL,
+    rowidentifier character varying(40) DEFAULT public.uuid_generate_v1() NOT NULL,
+    rowversion integer DEFAULT 0 NOT NULL,
+    change_action character(1) DEFAULT 'i'::bpchar NOT NULL,
+    change_user character varying(50),
+    change_time timestamp without time zone DEFAULT now() NOT NULL
+);
+
+
+ALTER TABLE cadastre.spatial_unit_address OWNER TO postgres;
+
+--
+-- Name: TABLE spatial_unit_address; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON TABLE spatial_unit_address IS 'Associates a spatial unit to one or more address records. 
+Tags: FLOSS SOLA Extension, Change History';
+
+
+--
+-- Name: COLUMN spatial_unit_address.spatial_unit_id; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN spatial_unit_address.spatial_unit_id IS 'Spatial unit identifier.';
+
+
+--
+-- Name: COLUMN spatial_unit_address.address_id; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN spatial_unit_address.address_id IS 'Address identifier';
+
+
+--
+-- Name: COLUMN spatial_unit_address.rowidentifier; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN spatial_unit_address.rowidentifier IS 'Identifies the all change records for the row in the spatial_unit_address_historic table';
+
+
+--
+-- Name: COLUMN spatial_unit_address.rowversion; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN spatial_unit_address.rowversion IS 'Sequential value indicating the number of times this row has been modified.';
+
+
+--
+-- Name: COLUMN spatial_unit_address.change_action; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN spatial_unit_address.change_action IS 'Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d).';
+
+
+--
+-- Name: COLUMN spatial_unit_address.change_user; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN spatial_unit_address.change_user IS 'The user id of the last person to modify the row.';
+
+
+--
+-- Name: COLUMN spatial_unit_address.change_time; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN spatial_unit_address.change_time IS 'The date and time the row was last modified.';
+
+
+--
+-- Name: zone_type; Type: TABLE; Schema: cadastre; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE zone_type (
+    code character varying(20) NOT NULL,
+    display_value character varying(500) NOT NULL,
+    description character varying(1000),
+    status character(1) DEFAULT 't'::bpchar NOT NULL
+);
+
+
+ALTER TABLE cadastre.zone_type OWNER TO postgres;
+
+--
+-- Name: TABLE zone_type; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON TABLE zone_type IS 'Code list of zones.. 
+  Tags: Reference Table, LADM Reference Object';
+
+
+--
+-- Name: COLUMN zone_type.code; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN zone_type.code IS 'LADM Definition: The code for the zone.';
+
+
+--
+-- Name: COLUMN zone_type.display_value; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN zone_type.display_value IS 'LADM Definition: Displayed value of the zone.';
+
+
+--
+-- Name: COLUMN zone_type.description; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN zone_type.description IS 'LADM Definition: Description of the zone.';
+
+
+--
+-- Name: COLUMN zone_type.status; Type: COMMENT; Schema: cadastre; Owner: postgres
+--
+
+COMMENT ON COLUMN zone_type.status IS 'SOLA Extension: Status of the zone';
+
+
 SET search_path = system, pg_catalog;
 
 --
@@ -9246,7 +9235,7 @@ SET search_path = application, pg_catalog;
 --
 
 CREATE VIEW systematic_registration_certificates AS
-    SELECT DISTINCT co.id, co.name_firstpart, co.name_lastpart, su.ba_unit_id, round(sa.size) AS size, administrative.get_parcel_share(su.ba_unit_id) AS owners, (SELECT setting.vl FROM system.setting WHERE ((setting.name)::text = 'state'::text)) AS state, (SELECT setting.vl FROM system.setting WHERE ((setting.name)::text = 'surveyor'::text)) AS surveyor, (SELECT setting.vl FROM system.setting WHERE ((setting.name)::text = 'surveyorRank'::text)) AS rank, (SELECT config_map_layer_metadata.value FROM system.config_map_layer_metadata WHERE (((config_map_layer_metadata.name_layer)::text = 'orthophoto'::text) AND ((config_map_layer_metadata.name)::text = 'date'::text))) AS imagerydate, (SELECT config_map_layer_metadata.value FROM system.config_map_layer_metadata WHERE (((config_map_layer_metadata.name_layer)::text = 'orthophoto'::text) AND ((config_map_layer_metadata.name)::text = 'resolution'::text))) AS imageryresolution, (SELECT config_map_layer_metadata.value FROM system.config_map_layer_metadata WHERE (((config_map_layer_metadata.name_layer)::text = 'orthophoto'::text) AND ((config_map_layer_metadata.name)::text = 'data-source'::text))) AS imagerysource, administrative.get_baunit_detail(su.ba_unit_id, 'LGA'::character varying) AS lga, administrative.get_baunit_detail(su.ba_unit_id, 'zone'::character varying) AS zone, administrative.get_baunit_detail(su.ba_unit_id, 'location'::character varying) AS location, administrative.get_baunit_detail(su.ba_unit_id, 'layoutPlan'::character varying) AS plan, administrative.get_baunit_detail(su.ba_unit_id, 'IntellMapSheet'::character varying) AS sheetnr, administrative.get_baunit_detail(su.ba_unit_id, 'dateCommenced'::character varying) AS commencingdate, administrative.get_baunit_detail(su.ba_unit_id, 'cOfOtype'::character varying) AS purpose, administrative.get_baunit_detail(su.ba_unit_id, 'term'::character varying) AS term, administrative.get_baunit_detail(su.ba_unit_id, 'yearlyRent'::character varying) AS rent FROM cadastre.cadastre_object co, administrative.ba_unit bu, cadastre.spatial_value_area sa, administrative.ba_unit_contains_spatial_unit su WHERE (((((bu.id)::text = (su.ba_unit_id)::text) AND ((su.spatial_unit_id)::text = (sa.spatial_unit_id)::text)) AND ((sa.spatial_unit_id)::text = (co.id)::text)) AND ((sa.type_code)::text = 'officialArea'::text)) ORDER BY co.name_firstpart, co.name_lastpart;
+    SELECT DISTINCT co.id, co.name_firstpart, co.name_lastpart, su.ba_unit_id, round(sa.size) AS size, administrative.get_parcel_share(su.ba_unit_id) AS owners, (SELECT setting.vl FROM system.setting WHERE ((setting.name)::text = 'state'::text)) AS state, (SELECT setting.vl FROM system.setting WHERE ((setting.name)::text = 'surveyor'::text)) AS surveyor, (SELECT setting.vl FROM system.setting WHERE ((setting.name)::text = 'surveyorRank'::text)) AS rank, (SELECT config_map_layer_metadata.value FROM system.config_map_layer_metadata WHERE (((config_map_layer_metadata.name_layer)::text = 'orthophoto'::text) AND ((config_map_layer_metadata.name)::text = 'date'::text))) AS imagerydate, (SELECT config_map_layer_metadata.value FROM system.config_map_layer_metadata WHERE (((config_map_layer_metadata.name_layer)::text = 'orthophoto'::text) AND ((config_map_layer_metadata.name)::text = 'resolution'::text))) AS imageryresolution, (SELECT config_map_layer_metadata.value FROM system.config_map_layer_metadata WHERE (((config_map_layer_metadata.name_layer)::text = 'orthophoto'::text) AND ((config_map_layer_metadata.name)::text = 'data-source'::text))) AS imagerysource, lga.display_value AS lga, zone.display_value AS zone, ad.description AS location, co.source_reference AS plan, co.intell_map_sheet AS sheetnr, rrr.date_commenced AS commencingdate, lu.display_value AS purpose, rrr.term, rrr.yearly_rent AS rent FROM cadastre.cadastre_object co, administrative.ba_unit bu, cadastre.land_use_type lu, cadastre.lga_type lga, cadastre.zone_type zone, cadastre.spatial_value_area sa, administrative.ba_unit_contains_spatial_unit su, administrative.rrr rrr, address.address ad, cadastre.spatial_unit_address sad WHERE ((((((((((((bu.id)::text = (su.ba_unit_id)::text) AND ((bu.id)::text = (rrr.ba_unit_id)::text)) AND ((su.spatial_unit_id)::text = (sa.spatial_unit_id)::text)) AND ((sa.spatial_unit_id)::text = (co.id)::text)) AND ((sa.type_code)::text = 'officialArea'::text)) AND ((COALESCE(co.land_use_code, 'residential'::character varying))::text = (lu.code)::text)) AND (COALESCE((co.lga_code)::text, 'Katsina'::text) = (lga.code)::text)) AND ((rrr.zone_code)::text = (zone.code)::text)) AND ((ad.id)::text = (sad.address_id)::text)) AND ((co.id)::text = (sad.spatial_unit_id)::text)) AND ((rrr.type_code)::text = 'ownership'::text)) ORDER BY co.name_firstpart, co.name_lastpart;
 
 
 ALTER TABLE application.systematic_registration_certificates OWNER TO postgres;
@@ -10409,66 +10398,6 @@ CREATE VIEW lga AS
 ALTER TABLE cadastre.lga OWNER TO postgres;
 
 --
--- Name: lga_type; Type: TABLE; Schema: cadastre; Owner: postgres; Tablespace: 
---
-
-CREATE TABLE lga_type (
-    code character varying(20) NOT NULL,
-    display_value character varying(500) NOT NULL,
-    description character varying(1000),
-    status character(1) DEFAULT 't'::bpchar NOT NULL
-);
-
-
-ALTER TABLE cadastre.lga_type OWNER TO postgres;
-
---
--- Name: TABLE lga_type; Type: COMMENT; Schema: cadastre; Owner: postgres
---
-
-COMMENT ON TABLE lga_type IS 'Code list of lgas.. 
-  Tags: Reference Table, LADM Reference Object';
-
-
---
--- Name: COLUMN lga_type.code; Type: COMMENT; Schema: cadastre; Owner: postgres
---
-
-COMMENT ON COLUMN lga_type.code IS 'LADM Definition: The code for the lga.';
-
-
---
--- Name: COLUMN lga_type.display_value; Type: COMMENT; Schema: cadastre; Owner: postgres
---
-
-COMMENT ON COLUMN lga_type.display_value IS 'LADM Definition: Displayed value of the lga.';
-
-
---
--- Name: COLUMN lga_type.description; Type: COMMENT; Schema: cadastre; Owner: postgres
---
-
-COMMENT ON COLUMN lga_type.description IS 'LADM Definition: Description of the lga.';
-
-
---
--- Name: COLUMN lga_type.status; Type: COMMENT; Schema: cadastre; Owner: postgres
---
-
-COMMENT ON COLUMN lga_type.status IS 'SOLA Extension: Status of the lga';
-
-
---
--- Name: parcel_plan; Type: VIEW; Schema: cadastre; Owner: postgres
---
-
-CREATE VIEW parcel_plan AS
-    SELECT DISTINCT co.name_firstpart, co.name_lastpart, co.id, su.ba_unit_id, round(sa.size) AS size, administrative.get_parcel_share(su.ba_unit_id) AS owners, (SELECT setting.vl FROM system.setting WHERE ((setting.name)::text = 'system-id'::text)) AS state, (SELECT setting.vl FROM system.setting WHERE ((setting.name)::text = 'surveyor'::text)) AS surveyor, (SELECT setting.vl FROM system.setting WHERE ((setting.name)::text = 'surveyorRank'::text)) AS rank, (SELECT config_map_layer_metadata.value FROM system.config_map_layer_metadata WHERE (((config_map_layer_metadata.name_layer)::text = 'orthophoto'::text) AND ((config_map_layer_metadata.name)::text = 'date'::text))) AS imagerydate, (SELECT config_map_layer_metadata.value FROM system.config_map_layer_metadata WHERE (((config_map_layer_metadata.name_layer)::text = 'orthophoto'::text) AND ((config_map_layer_metadata.name)::text = 'resolution'::text))) AS imageryresolution, (SELECT config_map_layer_metadata.value FROM system.config_map_layer_metadata WHERE (((config_map_layer_metadata.name_layer)::text = 'orthophoto'::text) AND ((config_map_layer_metadata.name)::text = 'data-source'::text))) AS imagerysource, administrative.get_baunit_detail(su.ba_unit_id, 'LGA'::character varying) AS lga, administrative.get_baunit_detail(su.ba_unit_id, 'zone'::character varying) AS zone, administrative.get_baunit_detail(su.ba_unit_id, 'location'::character varying) AS proplocation, administrative.get_baunit_detail(su.ba_unit_id, 'layoutPlan'::character varying) AS title, administrative.get_baunit_detail(su.ba_unit_id, 'IntellMapSheet'::character varying) AS sheetnr, administrative.get_baunit_detail(su.ba_unit_id, 'dateCommenced'::character varying) AS commencingdate, administrative.get_baunit_detail(su.ba_unit_id, 'cOfOtype'::character varying) AS landuse, administrative.get_baunit_detail(su.ba_unit_id, 'term'::character varying) AS term, administrative.get_baunit_detail(su.ba_unit_id, 'yearlyRent'::character varying) AS rent FROM cadastre_object co, administrative.ba_unit bu, spatial_value_area sa, administrative.ba_unit_contains_spatial_unit su WHERE (((((bu.id)::text = (su.ba_unit_id)::text) AND ((su.spatial_unit_id)::text = (sa.spatial_unit_id)::text)) AND ((sa.spatial_unit_id)::text = (co.id)::text)) AND ((sa.type_code)::text = 'officialArea'::text)) ORDER BY co.name_firstpart, co.name_lastpart;
-
-
-ALTER TABLE cadastre.parcel_plan OWNER TO postgres;
-
---
 -- Name: spatial_unit; Type: TABLE; Schema: cadastre; Owner: postgres; Tablespace: 
 --
 
@@ -10688,80 +10617,6 @@ ALTER TABLE cadastre.road OWNER TO postgres;
 --
 
 COMMENT ON VIEW road IS 'View for retrieving road and road centreline features for display in the Map Viewer. Not used by SOLA. Layer queries (defined in system.query) are used instead.';
-
-
---
--- Name: spatial_unit_address; Type: TABLE; Schema: cadastre; Owner: postgres; Tablespace: 
---
-
-CREATE TABLE spatial_unit_address (
-    spatial_unit_id character varying(40) NOT NULL,
-    address_id character varying(40) NOT NULL,
-    rowidentifier character varying(40) DEFAULT public.uuid_generate_v1() NOT NULL,
-    rowversion integer DEFAULT 0 NOT NULL,
-    change_action character(1) DEFAULT 'i'::bpchar NOT NULL,
-    change_user character varying(50),
-    change_time timestamp without time zone DEFAULT now() NOT NULL
-);
-
-
-ALTER TABLE cadastre.spatial_unit_address OWNER TO postgres;
-
---
--- Name: TABLE spatial_unit_address; Type: COMMENT; Schema: cadastre; Owner: postgres
---
-
-COMMENT ON TABLE spatial_unit_address IS 'Associates a spatial unit to one or more address records. 
-Tags: FLOSS SOLA Extension, Change History';
-
-
---
--- Name: COLUMN spatial_unit_address.spatial_unit_id; Type: COMMENT; Schema: cadastre; Owner: postgres
---
-
-COMMENT ON COLUMN spatial_unit_address.spatial_unit_id IS 'Spatial unit identifier.';
-
-
---
--- Name: COLUMN spatial_unit_address.address_id; Type: COMMENT; Schema: cadastre; Owner: postgres
---
-
-COMMENT ON COLUMN spatial_unit_address.address_id IS 'Address identifier';
-
-
---
--- Name: COLUMN spatial_unit_address.rowidentifier; Type: COMMENT; Schema: cadastre; Owner: postgres
---
-
-COMMENT ON COLUMN spatial_unit_address.rowidentifier IS 'Identifies the all change records for the row in the spatial_unit_address_historic table';
-
-
---
--- Name: COLUMN spatial_unit_address.rowversion; Type: COMMENT; Schema: cadastre; Owner: postgres
---
-
-COMMENT ON COLUMN spatial_unit_address.rowversion IS 'Sequential value indicating the number of times this row has been modified.';
-
-
---
--- Name: COLUMN spatial_unit_address.change_action; Type: COMMENT; Schema: cadastre; Owner: postgres
---
-
-COMMENT ON COLUMN spatial_unit_address.change_action IS 'Indicates if the last data modification action that occurred to the row was insert (i), update (u) or delete (d).';
-
-
---
--- Name: COLUMN spatial_unit_address.change_user; Type: COMMENT; Schema: cadastre; Owner: postgres
---
-
-COMMENT ON COLUMN spatial_unit_address.change_user IS 'The user id of the last person to modify the row.';
-
-
---
--- Name: COLUMN spatial_unit_address.change_time; Type: COMMENT; Schema: cadastre; Owner: postgres
---
-
-COMMENT ON COLUMN spatial_unit_address.change_time IS 'The date and time the row was last modified.';
 
 
 --
@@ -11331,56 +11186,6 @@ CREATE VIEW ward AS
 
 ALTER TABLE cadastre.ward OWNER TO postgres;
 
---
--- Name: zone_type; Type: TABLE; Schema: cadastre; Owner: postgres; Tablespace: 
---
-
-CREATE TABLE zone_type (
-    code character varying(20) NOT NULL,
-    display_value character varying(500) NOT NULL,
-    description character varying(1000),
-    status character(1) DEFAULT 't'::bpchar NOT NULL
-);
-
-
-ALTER TABLE cadastre.zone_type OWNER TO postgres;
-
---
--- Name: TABLE zone_type; Type: COMMENT; Schema: cadastre; Owner: postgres
---
-
-COMMENT ON TABLE zone_type IS 'Code list of zones.. 
-  Tags: Reference Table, LADM Reference Object';
-
-
---
--- Name: COLUMN zone_type.code; Type: COMMENT; Schema: cadastre; Owner: postgres
---
-
-COMMENT ON COLUMN zone_type.code IS 'LADM Definition: The code for the zone.';
-
-
---
--- Name: COLUMN zone_type.display_value; Type: COMMENT; Schema: cadastre; Owner: postgres
---
-
-COMMENT ON COLUMN zone_type.display_value IS 'LADM Definition: Displayed value of the zone.';
-
-
---
--- Name: COLUMN zone_type.description; Type: COMMENT; Schema: cadastre; Owner: postgres
---
-
-COMMENT ON COLUMN zone_type.description IS 'LADM Definition: Description of the zone.';
-
-
---
--- Name: COLUMN zone_type.status; Type: COMMENT; Schema: cadastre; Owner: postgres
---
-
-COMMENT ON COLUMN zone_type.status IS 'SOLA Extension: Status of the zone';
-
-
 SET search_path = document, pg_catalog;
 
 --
@@ -11926,7 +11731,7 @@ CREATE TABLE claim (
     rejection_reason_code character varying(20),
     claim_area bigint DEFAULT 0,
     CONSTRAINT enforce_geotype_gps_geometry CHECK ((((public.geometrytype(gps_geometry) = 'POLYGON'::text) OR (public.geometrytype(gps_geometry) = 'POINT'::text)) OR (gps_geometry IS NULL))),
-    CONSTRAINT enforce_geotype_mapped_geometry CHECK ((((public.geometrytype(mapped_geometry) = 'POLYGON'::text) OR (public.geometrytype(mapped_geometry) = 'POINT'::text)) OR (mapped_geometry IS NULL))),
+    CONSTRAINT enforce_geotype_mapped_geometry CHECK (((((public.geometrytype(mapped_geometry) = 'POLYGON'::text) OR (public.geometrytype(mapped_geometry) = 'POINT'::text)) OR (public.geometrytype(mapped_geometry) = 'LINESTRING'::text)) OR (mapped_geometry IS NULL))),
     CONSTRAINT enforce_valid_gps_geometry CHECK (public.st_isvalid(gps_geometry)),
     CONSTRAINT enforce_valid_mapped_geometry CHECK (public.st_isvalid(mapped_geometry))
 );
@@ -12309,9 +12114,7 @@ CREATE TABLE claim_location (
     change_action character(1) DEFAULT 'i'::bpchar NOT NULL,
     change_user character varying(50),
     change_time timestamp without time zone DEFAULT now() NOT NULL,
-    CONSTRAINT enforce_geotype_gps_location CHECK ((((public.geometrytype(gps_location) = 'POLYGON'::text) OR (public.geometrytype(gps_location) = 'POINT'::text)) OR (gps_location IS NULL))),
-    CONSTRAINT enforce_geotype_mapped_location CHECK (((public.geometrytype(mapped_location) = 'POLYGON'::text) OR (public.geometrytype(mapped_location) = 'POINT'::text))),
-    CONSTRAINT enforce_valid_gps_location CHECK (public.st_isvalid(gps_location)),
+    CONSTRAINT enforce_geotype_mapped_location CHECK ((((public.geometrytype(mapped_location) = 'POLYGON'::text) OR (public.geometrytype(mapped_location) = 'POINT'::text)) OR (public.geometrytype(mapped_location) = 'LINESTRING'::text))),
     CONSTRAINT enforce_valid_mapped_location CHECK (public.st_isvalid(mapped_location))
 );
 
@@ -17905,30 +17708,6 @@ ALTER TABLE ONLY ba_unit_contains_spatial_unit
 
 
 --
--- Name: ba_unit_detail_pkey; Type: CONSTRAINT; Schema: administrative; Owner: postgres; Tablespace: 
---
-
-ALTER TABLE ONLY ba_unit_detail
-    ADD CONSTRAINT ba_unit_detail_pkey PRIMARY KEY (id);
-
-
---
--- Name: ba_unit_detail_type_display_value_unique; Type: CONSTRAINT; Schema: administrative; Owner: postgres; Tablespace: 
---
-
-ALTER TABLE ONLY ba_unit_detail_type
-    ADD CONSTRAINT ba_unit_detail_type_display_value_unique UNIQUE (display_value);
-
-
---
--- Name: ba_unit_detail_type_pkey; Type: CONSTRAINT; Schema: administrative; Owner: postgres; Tablespace: 
---
-
-ALTER TABLE ONLY ba_unit_detail_type
-    ADD CONSTRAINT ba_unit_detail_type_pkey PRIMARY KEY (code);
-
-
---
 -- Name: ba_unit_pkey; Type: CONSTRAINT; Schema: administrative; Owner: postgres; Tablespace: 
 --
 
@@ -19735,34 +19514,6 @@ CREATE INDEX ba_unit_contains_spatial_unit_spatial_unit_id_fk69_ind ON ba_unit_c
 --
 
 CREATE INDEX ba_unit_contains_spatial_unit_spatial_unit_id_fk70_ind ON ba_unit_contains_spatial_unit USING btree (spatial_unit_id);
-
-
---
--- Name: ba_unit_detail_ba_unit_id_fk86_ind; Type: INDEX; Schema: administrative; Owner: postgres; Tablespace: 
---
-
-CREATE INDEX ba_unit_detail_ba_unit_id_fk86_ind ON ba_unit_detail USING btree (ba_unit_id);
-
-
---
--- Name: ba_unit_detail_detail_code_fk85_ind; Type: INDEX; Schema: administrative; Owner: postgres; Tablespace: 
---
-
-CREATE INDEX ba_unit_detail_detail_code_fk85_ind ON ba_unit_detail USING btree (detail_code);
-
-
---
--- Name: ba_unit_detail_historic_index_on_rowidentifier; Type: INDEX; Schema: administrative; Owner: postgres; Tablespace: 
---
-
-CREATE INDEX ba_unit_detail_historic_index_on_rowidentifier ON ba_unit_detail_historic USING btree (rowidentifier);
-
-
---
--- Name: ba_unit_detail_index_on_rowidentifier; Type: INDEX; Schema: administrative; Owner: postgres; Tablespace: 
---
-
-CREATE INDEX ba_unit_detail_index_on_rowidentifier ON ba_unit_detail USING btree (rowidentifier);
 
 
 --
@@ -21734,13 +21485,6 @@ CREATE TRIGGER __track_changes BEFORE INSERT OR UPDATE ON source_describes_rrr F
 
 
 --
--- Name: __track_changes; Type: TRIGGER; Schema: administrative; Owner: postgres
---
-
-CREATE TRIGGER __track_changes BEFORE INSERT OR UPDATE ON ba_unit_detail FOR EACH ROW EXECUTE PROCEDURE public.f_for_trg_track_changes();
-
-
---
 -- Name: __track_history; Type: TRIGGER; Schema: administrative; Owner: postgres
 --
 
@@ -21829,13 +21573,6 @@ CREATE TRIGGER __track_history AFTER DELETE OR UPDATE ON source_describes_ba_uni
 --
 
 CREATE TRIGGER __track_history AFTER DELETE OR UPDATE ON source_describes_rrr FOR EACH ROW EXECUTE PROCEDURE public.f_for_trg_track_history();
-
-
---
--- Name: __track_history; Type: TRIGGER; Schema: administrative; Owner: postgres
---
-
-CREATE TRIGGER __track_history AFTER DELETE OR UPDATE ON ba_unit_detail FOR EACH ROW EXECUTE PROCEDURE public.f_for_trg_track_history();
 
 
 --
@@ -21974,13 +21711,6 @@ SET search_path = cadastre, pg_catalog;
 -- Name: __track_changes; Type: TRIGGER; Schema: cadastre; Owner: postgres
 --
 
-CREATE TRIGGER __track_changes BEFORE INSERT OR UPDATE ON cadastre_object FOR EACH ROW EXECUTE PROCEDURE public.f_for_trg_track_changes();
-
-
---
--- Name: __track_changes; Type: TRIGGER; Schema: cadastre; Owner: postgres
---
-
 CREATE TRIGGER __track_changes BEFORE INSERT OR UPDATE ON cadastre_object_node_target FOR EACH ROW EXECUTE PROCEDURE public.f_for_trg_track_changes();
 
 
@@ -22045,6 +21775,13 @@ CREATE TRIGGER __track_changes BEFORE INSERT OR UPDATE ON spatial_value_area FOR
 --
 
 CREATE TRIGGER __track_changes BEFORE INSERT OR UPDATE ON survey_point FOR EACH ROW EXECUTE PROCEDURE public.f_for_trg_track_changes();
+
+
+--
+-- Name: __track_changes; Type: TRIGGER; Schema: cadastre; Owner: postgres
+--
+
+CREATE TRIGGER __track_changes BEFORE INSERT OR UPDATE ON cadastre_object FOR EACH ROW EXECUTE PROCEDURE public.f_for_trg_track_changes();
 
 
 --
@@ -22689,22 +22426,6 @@ ALTER TABLE ONLY ba_unit_contains_spatial_unit
 
 ALTER TABLE ONLY ba_unit_contains_spatial_unit
     ADD CONSTRAINT ba_unit_contains_spatial_unit_spatial_unit_id_fk70 FOREIGN KEY (spatial_unit_id) REFERENCES cadastre.cadastre_object(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: ba_unit_detail_ba_unit_id_fk86; Type: FK CONSTRAINT; Schema: administrative; Owner: postgres
---
-
-ALTER TABLE ONLY ba_unit_detail
-    ADD CONSTRAINT ba_unit_detail_ba_unit_id_fk86 FOREIGN KEY (ba_unit_id) REFERENCES ba_unit(id) ON UPDATE CASCADE ON DELETE CASCADE;
-
-
---
--- Name: ba_unit_detail_detail_code_fk85; Type: FK CONSTRAINT; Schema: administrative; Owner: postgres
---
-
-ALTER TABLE ONLY ba_unit_detail
-    ADD CONSTRAINT ba_unit_detail_detail_code_fk85 FOREIGN KEY (detail_code) REFERENCES ba_unit_detail_type(code) ON UPDATE CASCADE ON DELETE RESTRICT;
 
 
 --
@@ -23633,6 +23354,22 @@ ALTER TABLE ONLY claim
 
 ALTER TABLE ONLY attachment
     ADD CONSTRAINT fk_document_type_code FOREIGN KEY (type_code) REFERENCES source.administrative_source_type(code);
+
+
+--
+-- Name: fk_party_gender; Type: FK CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY party
+    ADD CONSTRAINT fk_party_gender FOREIGN KEY (gender_code) REFERENCES party.gender_type(code);
+
+
+--
+-- Name: fk_party_id_type; Type: FK CONSTRAINT; Schema: opentenure; Owner: postgres
+--
+
+ALTER TABLE ONLY party
+    ADD CONSTRAINT fk_party_id_type FOREIGN KEY (id_type_code) REFERENCES party.id_type(code);
 
 
 --
