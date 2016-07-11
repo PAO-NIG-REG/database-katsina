@@ -42,7 +42,7 @@ echo ### Dumping reference tables... >> %EXTRACT_LOG% 2>&1
 %pg_dump% -h %host% -p %port% -U %username% -a -b -F p ^
     --column-inserts --disable-dollar-quoting --disable-triggers ^
     -t administrative.ba_unit_rel_type -t administrative.ba_unit_type ^
-	-t administrative.condition_type -t administrative.mortgage_type ^
+	-t administrative.mortgage_type ^
 	-t administrative.rrr_group_type -t administrative.rrr_type ^
 	-t application.application_status_type -t application.service_status_type ^
 	-t application.service_action_type -t application.type_action ^

@@ -17,6 +17,7 @@ CREATE TABLE administrative.lease_condition_template
   change_user character varying(50),
   change_time timestamp without time zone NOT NULL DEFAULT now(), 
   CONSTRAINT id PRIMARY KEY (id),
+  CONSTRAINT template_name_unique UNIQUE (template_name),
   CONSTRAINT lease_condition_template_rrr_type FOREIGN KEY (rrr_type)
       REFERENCES administrative.rrr_type (code) MATCH SIMPLE
       ON UPDATE CASCADE ON DELETE RESTRICT

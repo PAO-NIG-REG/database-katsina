@@ -139,8 +139,8 @@ INSERT INTO br (id, display_name, technical_type_code, feedback, description, te
 INSERT INTO br (id, display_name, technical_type_code, feedback, description, technical_description) VALUES ('cancel-obscuration-request', 'cancel-obscuration-request', 'sql', 'cancel-obscuration-request::::...::::...::::...::::...::::...::::...::::...::::...', NULL, '#{id}(service_id) is requested');
 INSERT INTO br (id, display_name, technical_type_code, feedback, description, technical_description) VALUES ('cancel-relation-notification', 'cancel-relation-notification', 'sql', 'Cancel notification for the services of the application', NULL, '#{id}(application_id) is requested');
 INSERT INTO br (id, display_name, technical_type_code, feedback, description, technical_description) VALUES ('delete-relation-notification', 'delete-relation-notification', 'sql', 'Delete notification for the services of the application', NULL, '#{id}(application_id) is requested');
-INSERT INTO br (id, display_name, technical_type_code, feedback, description, technical_description) VALUES ('generate-cofo-nr', 'generate-cofo-nr', 'sql', '...::::::::...::::::::::::::::...::::::::...', NULL, '');
 INSERT INTO br (id, display_name, technical_type_code, feedback, description, technical_description) VALUES ('diagram-is-jpg', 'diagram-is-jpg', 'sql', 'Primary right created by the service must have a Diagram document attached and the Diagram must be in jpg format', NULL, '#{id}(application.service.id)');
+INSERT INTO br (id, display_name, technical_type_code, feedback, description, technical_description) VALUES ('generate-cofo-nr', 'generate-cofo-nr', 'sql', '...::::::::...::::::::::::::::...::::::::...', NULL, '');
 
 
 ALTER TABLE br ENABLE TRIGGER ALL;
@@ -811,6 +811,10 @@ SELECT	CASE 	WHEN (SELECT (cnt = 0) FROM checkServiceType) THEN NULL
 		ELSE FALSE
 	END AS vl');
 INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('consolidation-extraction-file-name', '2014-09-12', 'infinity', 'select ''consolidation-'' || system.get_setting(''system-id'') || to_char(clock_timestamp(), ''-yyyy-MM-dd-HH24-MI'') as vl');
+INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('generate-process-progress-consolidate-max', '2014-09-12', 'infinity', 'select 10 
+  + 2 + (select count(*)*2 from system.consolidation_config) 
+  + 1 + (select count(*)*2 from system.br_validation where target_code=''consolidate'')
+  + 4 + (select count(*)*2 from system.consolidation_config) as vl');
 INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('source-attach-in-transaction-allowed-type', '2014-02-20', 'infinity', 'WITH checkServiceType	AS	(SELECT COUNT(*) AS cnt FROM application.service sv1
 					INNER JOIN transaction.transaction tn ON (sv1.id = tn.from_service_id)
 					INNER JOIN source.source sc1 ON (tn.id = sc1.transaction_id)
@@ -954,10 +958,6 @@ INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('appl
 from application.application_spatial_unit  
 where application_id = #{id} and spatial_unit_id in (select spatial_unit_id from application.application_spatial_unit where application_id in (select id from application.application where status_code=''transferred''))');
 INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('consolidation-not-again', '2014-09-12', 'infinity', 'select not records_found as vl, result from system.get_already_consolidated_records() as vl');
-INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('generate-process-progress-consolidate-max', '2014-09-12', 'infinity', 'select 10 
-  + 2 + (select count(*)*2 from system.consolidation_config) 
-  + 1 + (select count(*)*2 from system.br_validation where target_code=''consolidate'')
-  + 4 + (select count(*)*2 from system.consolidation_config) as vl');
 INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('consolidation-db-structure-the-same', '2014-02-20', 'infinity', 'with def_of_tables as (
   select source_table_name, target_table_name, 
     (select string_agg(col_definition, ''##'') from (select column_name || '' '' 
@@ -1046,6 +1046,24 @@ WHERE 	      s.application_id::text = aa.id::text
 ;
 select 0=0 as vl
 ');
+INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('diagram-is-jpg', '2014-02-20', 'infinity', 'Select count (d.id) > 0 AS vl
+from document.document d, 
+source.source s,
+administrative.source_describes_rrr  sdr,
+administrative.rrr rrr,
+transaction.transaction t,
+application.service ser
+where s.ext_archive_id = d.id
+and s.type_code = ''cadastralSurvey''
+and upper(d.extension) = ''JPG''
+and sdr.source_id = s.id
+and sdr.rrr_id = rrr.id
+and rrr.type_code = ''ownership''
+and rrr.transaction_id = t.id 
+and t.from_service_id = ser.id
+and ser.request_type_code in (''newFreehold'',''newDigitalTitle'',''newOwnership'')
+and ser.id = #{id}
+');
 INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('application-for-new-title-has-cancel-property-service', '2014-02-20', 'infinity', 'WITH 	newFreeholdApp	AS	(SELECT (SUM(1) > 0) AS fhCheck FROM application.service se
 				WHERE 
 				se.application_id = #{id}	AND 
@@ -1066,24 +1084,6 @@ INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('appl
 				ELSE null
 				END AS vl FROM newFreeholdApp');
 INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('generate-cofo-nr', '2014-02-20', 'infinity', 'SELECT coalesce(system.get_setting(''system-id''), '''') || to_char(now(), ''yymm'') || trim(to_char(nextval(''administrative.cofo_nr_seq''), ''0000'')) AS vl');
-INSERT INTO br_definition (br_id, active_from, active_until, body) VALUES ('diagram-is-jpg', '2014-02-20', 'infinity', 'Select count (d.id) > 0 AS vl
-from document.document d, 
-source.source s,
-administrative.source_describes_rrr  sdr,
-administrative.rrr rrr,
-transaction.transaction t,
-application.service ser
-where s.ext_archive_id = d.id
-and s.type_code = ''cadastralSurvey''
-and upper(d.extension) = ''JPG''
-and sdr.source_id = s.id
-and sdr.rrr_id = rrr.id
-and rrr.type_code = ''ownership''
-and rrr.transaction_id = t.id 
-and t.from_service_id = ser.id
-and ser.request_type_code in (''newFreehold'',''newDigitalTitle'',''newOwnership'')
-and ser.id = #{id}
-');
 
 
 ALTER TABLE br_definition ENABLE TRIGGER ALL;

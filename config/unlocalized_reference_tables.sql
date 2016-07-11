@@ -59,12 +59,12 @@ INSERT INTO request_type_requires_source_type (source_type_code, request_type_co
 INSERT INTO request_type_requires_source_type (source_type_code, request_type_code) VALUES ('relationshipTitle', 'recordRelationship');
 INSERT INTO request_type_requires_source_type (source_type_code, request_type_code) VALUES ('relationshipTitle', 'cancelRelationship');
 INSERT INTO request_type_requires_source_type (source_type_code, request_type_code) VALUES ('restrictionOrder', 'obscurationRequest');
-INSERT INTO request_type_requires_source_type (source_type_code, request_type_code) VALUES ('deed', 'subdivideProperty');
 INSERT INTO request_type_requires_source_type (source_type_code, request_type_code) VALUES ('cadastralSurvey', 'newFreehold');
 INSERT INTO request_type_requires_source_type (source_type_code, request_type_code) VALUES ('application', 'newFreehold');
 INSERT INTO request_type_requires_source_type (source_type_code, request_type_code) VALUES ('application', 'mortgage');
 INSERT INTO request_type_requires_source_type (source_type_code, request_type_code) VALUES ('application', 'registerLease');
 INSERT INTO request_type_requires_source_type (source_type_code, request_type_code) VALUES ('application', 'newOwnership');
+INSERT INTO request_type_requires_source_type (source_type_code, request_type_code) VALUES ('deed', 'subdivideProperty');
 
 
 ALTER TABLE request_type_requires_source_type ENABLE TRIGGER ALL;
@@ -84,9 +84,9 @@ INSERT INTO level (id, name, register_type_code, structure_code, type_code, rowi
 INSERT INTO level (id, name, register_type_code, structure_code, type_code, rowidentifier, rowversion, change_action, change_user, change_time, editable) VALUES ('road-centerline', 'Road centerline', 'all', 'unStructuredLine', 'geographicLocator', 'f099731a-cd80-11e3-8b0c-53bca1817824', 1, 'i', 'db:postgres', '2014-04-26 22:25:42.727', true);
 INSERT INTO level (id, name, register_type_code, structure_code, type_code, rowidentifier, rowversion, change_action, change_user, change_time, editable) VALUES ('c03162e0-99dd-11e3-a27b-2bfeef31a969', 'Place Names', 'all', 'point', 'geographicLocator', 'c03189f0-99dd-11e3-905e-8be6604148a7', 2, 'u', 'test', '2014-04-26 22:25:42.727', true);
 INSERT INTO level (id, name, register_type_code, structure_code, type_code, rowidentifier, rowversion, change_action, change_user, change_time, editable) VALUES ('house-num', 'House Number', 'all', 'point', 'geographicLocator', '4ae9b152-02f3-11e4-a6bb-db5f0510f653', 1, 'i', 'soladev', '2014-07-04 08:47:35.126', false);
-INSERT INTO level (id, name, register_type_code, structure_code, type_code, rowidentifier, rowversion, change_action, change_user, change_time, editable) VALUES ('c504f75a-3eb3-11e6-a518-2b63b9925dc4', 'LGA', 'all', 'polygon', 'mixed', 'c50c987a-3eb3-11e6-b7be-3f9b0a32b90c', 1, 'i', 'test', '2016-06-30 13:14:10.688', false);
-INSERT INTO level (id, name, register_type_code, structure_code, type_code, rowidentifier, rowversion, change_action, change_user, change_time, editable) VALUES ('c50e1f1a-3eb3-11e6-b1d2-a74b9daebadb', 'Ward', 'all', 'polygon', 'mixed', 'c50fa5ba-3eb3-11e6-b4ce-b7313f130e8b', 1, 'i', 'test', '2016-06-30 13:14:10.748', false);
-INSERT INTO level (id, name, register_type_code, structure_code, type_code, rowidentifier, rowversion, change_action, change_user, change_time, editable) VALUES ('c515c03a-3eb3-11e6-bd30-0f507ec09921', 'OverlappingParcels', 'all', 'polygon', 'mixed', 'c515c03a-3eb3-11e6-9e9a-b31a8de889c1', 1, 'i', 'test', '2016-06-30 13:14:10.798', false);
+INSERT INTO level (id, name, register_type_code, structure_code, type_code, rowidentifier, rowversion, change_action, change_user, change_time, editable) VALUES ('748d8dae-421a-11e6-a5c1-bfaee504574f', 'LGA', 'all', 'polygon', 'mixed', '749f6844-421a-11e6-8faa-1f0f19da0858', 1, 'i', 'test', '2016-07-05 01:06:47.337', false);
+INSERT INTO level (id, name, register_type_code, structure_code, type_code, rowidentifier, rowversion, change_action, change_user, change_time, editable) VALUES ('74a29c9e-421a-11e6-a881-a35dd9b90af0', 'Ward', 'all', 'polygon', 'mixed', '74a2eabe-421a-11e6-a792-73aca4b81adb', 1, 'i', 'test', '2016-07-05 01:06:47.477', false);
+INSERT INTO level (id, name, register_type_code, structure_code, type_code, rowidentifier, rowversion, change_action, change_user, change_time, editable) VALUES ('74ad2416-421a-11e6-9620-ff8b02c5f2d0', 'OverlappingParcels', 'all', 'polygon', 'mixed', '74ad7236-421a-11e6-95f2-87e7c58c9ee7', 1, 'i', 'test', '2016-07-05 01:06:47.546', false);
 
 
 ALTER TABLE level ENABLE TRIGGER ALL;
