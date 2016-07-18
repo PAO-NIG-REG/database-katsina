@@ -24,9 +24,6 @@ SET search_path = administrative, pg_catalog;
 
 SET SESSION AUTHORIZATION DEFAULT;
 
-DELETE FROM condition_type  where is_for = 'cofo';
-
-
 ALTER TABLE ba_unit_detail_type DISABLE TRIGGER ALL;
 DELETE FROM ba_unit_detail_type;
 --
