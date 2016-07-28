@@ -4486,7 +4486,8 @@ CREATE TABLE ba_unit (
     change_user character varying(50),
     change_time timestamp without time zone DEFAULT now() NOT NULL,
     classification_code character varying(20),
-    redact_code character varying(20)
+    redact_code character varying(20),
+    address_for_notice character varying(255)
 );
 
 
@@ -4899,7 +4900,8 @@ CREATE TABLE ba_unit_historic (
     change_time timestamp without time zone,
     change_time_valid_until timestamp without time zone DEFAULT now() NOT NULL,
     classification_code character varying(20),
-    redact_code character varying(20)
+    redact_code character varying(20),
+    address_for_notice character varying(255)
 );
 
 
@@ -5140,6 +5142,20 @@ ALTER TABLE administrative.cofo_nr_seq OWNER TO postgres;
 
 COMMENT ON SEQUENCE cofo_nr_seq IS 'Sequence number used as the basis for the CofO numbering. This sequence is used by the generate-cofo-nr business rule.';
 
+
+--
+-- Name: cofo_type; Type: TABLE; Schema: administrative; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE cofo_type (
+    code character varying(20) NOT NULL,
+    display_value character varying(500) NOT NULL,
+    status character(1) DEFAULT 't'::bpchar NOT NULL,
+    description character varying(1000)
+);
+
+
+ALTER TABLE administrative.cofo_type OWNER TO postgres;
 
 --
 -- Name: lease_condition_template; Type: TABLE; Schema: administrative; Owner: postgres; Tablespace: 
@@ -5817,7 +5833,8 @@ CREATE TABLE rrr (
     advance_payment numeric(29,0),
     yearly_rent numeric(19,0),
     review_period integer,
-    lease_conditions text
+    lease_conditions text,
+    cofo_type character varying
 );
 
 
@@ -5993,6 +6010,13 @@ COMMENT ON COLUMN rrr.lease_conditions IS 'Lease conditions text';
 
 
 --
+-- Name: COLUMN rrr.cofo_type; Type: COMMENT; Schema: administrative; Owner: postgres
+--
+
+COMMENT ON COLUMN rrr.cofo_type IS 'type of cofo';
+
+
+--
 -- Name: rrr_group_type; Type: TABLE; Schema: administrative; Owner: postgres; Tablespace: 
 --
 
@@ -6080,7 +6104,8 @@ CREATE TABLE rrr_historic (
     advance_payment numeric(29,0),
     yearly_rent numeric(19,0),
     review_period integer,
-    lease_conditions text
+    lease_conditions text,
+    cofo_type text
 );
 
 
@@ -17693,6 +17718,14 @@ ALTER TABLE ONLY ba_unit_type
 
 
 --
+-- Name: cofo_type_pkey; Type: CONSTRAINT; Schema: administrative; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY cofo_type
+    ADD CONSTRAINT cofo_type_pkey PRIMARY KEY (code);
+
+
+--
 -- Name: id; Type: CONSTRAINT; Schema: administrative; Owner: postgres; Tablespace: 
 --
 
@@ -22479,6 +22512,14 @@ ALTER TABLE ONLY required_relationship_baunit
 
 ALTER TABLE ONLY rrr
     ADD CONSTRAINT rrr_ba_unit_id_fk42 FOREIGN KEY (ba_unit_id) REFERENCES ba_unit(id) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
+-- Name: rrr_cofo_type_code_fk46; Type: FK CONSTRAINT; Schema: administrative; Owner: postgres
+--
+
+ALTER TABLE ONLY rrr
+    ADD CONSTRAINT rrr_cofo_type_code_fk46 FOREIGN KEY (cofo_type) REFERENCES cofo_type(code) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

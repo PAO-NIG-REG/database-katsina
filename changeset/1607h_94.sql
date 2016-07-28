@@ -1,0 +1,1 @@
+﻿INSERT INTO system.version SELECT '1607h' WHERE NOT EXISTS (SELECT version_num FROM system.version WHERE version_num = '1607h');
